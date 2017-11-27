@@ -41,7 +41,7 @@ final class SimpleMapper implements Mapper
 			throw MapperException::namespaceSeparatorMustHaveOneCharacterOnly();
 		}
 
-		if(!$this->startsWith($fullyQualifiedName, $this->namespacePrefix)) {
+		if(!$this->startsWith($fullyQualifiedName, $this->namespacePrefix . $this->namespaceSeparator)) {
 			return NULL;
 		}
 
@@ -74,7 +74,7 @@ final class SimpleMapper implements Mapper
 			throw MapperException::namespaceSeparatorMustHaveOneCharacterOnly();
 		}
 
-		if(!$this->startsWith($transferName, $this->transferPrefix)) {
+		if(!$this->startsWith($transferName, $this->transferPrefix . $this->transferNamespaceSeparator)) {
 			return NULL;
 		}
 

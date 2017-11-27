@@ -38,6 +38,8 @@ Assert::exception(
 	"Fully qualified name cannot end with namespace separator. 'MyApp\\Model\\Domain\\Events\\MyApp\\Model\\Domain\\Events\\' given"
 );
 
+Assert::null( $mapper->toTransferName('MyApp\\Model\\Domain\\EventsMigrator') );
+
 
 // to qualified name
 Assert::null($mapper->toFullyQualifiedName('Bla'));
@@ -53,3 +55,4 @@ Assert::same(
 	$mapper->toFullyQualifiedName('Events.Events')
 );
 
+Assert::null( $mapper->toFullyQualifiedName('EventsMigrator') );
