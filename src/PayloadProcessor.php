@@ -16,7 +16,7 @@ use Grifart\Stateful\Mapper\Mapper;
  */
 final class PayloadProcessor
 {
-	private const META_FIELD = '@(meta)';
+	public const META_FIELD = '@(meta)';
 
 	private const META_FIELD_SERIALIZATION_VERSION = 'serializationVersion';
 
