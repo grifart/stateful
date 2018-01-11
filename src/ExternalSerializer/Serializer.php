@@ -18,7 +18,7 @@ interface Serializer
 	 *
 	 * There must be enough data to {@see reconstructFromState} be able to reconstruct original object.
 	 *
-	 * @param $object
+	 * @param object $object
 	 * @return \Grifart\Stateful\State|null
 	 */
 	public function extractState($object): ?State;

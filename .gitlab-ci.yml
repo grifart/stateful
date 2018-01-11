@@ -33,7 +33,7 @@ test.phpstan:
   before_script:
     - composer global require phpstan/phpstan-shim
   script:
-    - phpstan.phar analyze --ansi --no-progress --no-interaction --level 7 src
+    - phpstan.phar analyze -c phpstan.neon --ansi --no-progress --no-interaction --level 7 src
 
 
 test.linter:
