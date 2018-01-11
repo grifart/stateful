@@ -16,9 +16,9 @@ use Grifart\Stateful\Mapper\Mapper;
  */
 final class PayloadProcessor
 {
-	const META_FIELD = '@(meta)';
+	private const META_FIELD = '@(meta)';
 
-	const META_FIELD_SERIALIZATION_VERSION = 'serializationVersion';
+	private const META_FIELD_SERIALIZATION_VERSION = 'serializationVersion';
 
 	/** @var Mapper */
 	private $mapper;
@@ -270,7 +270,7 @@ final class PayloadProcessor
 
 		// non-stateful objects --> use ad-hoc provided unserializers
 		if (($createdObject = $this->externalSerializer->reconstructFromState($objectState)) !== NULL) {
-
+			\assert($createdObject !== NULL); // phpstan workaround; handled one line above; https://github.com/phpstan/phpstan/issues/750
 			if(Tools::areAssertsEvaluated()) {
 				$this->assertCreatedObject($objectState, $createdObject);
 			}
