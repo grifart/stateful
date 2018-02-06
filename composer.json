@@ -5,8 +5,8 @@
 	"require": {
 		"php": ">= 7.1.0",
 		"php-ds/php-ds": "^1.1",
-		"grifart/comparable-polyfill": "dev-master",
-		"grifart/equalable-utils": "dev-master"
+		"grifart/comparable-polyfill": "^1.0",
+		"grifart/equalable-utils": "^1.0"
 	},
 	"require-dev": {
 		"nette/tester": "^2.0.0",
