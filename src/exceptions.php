@@ -205,13 +205,22 @@ final class ExternalSerializerException extends UsageException {
 
 	public static function serializerIsNotAValidFunction(\ReflectionException $previous)
 	{
-		return new self('Provided (de)serializer is not a valid function.', NULL, $previous);
+		return new self('Provided (de)serializer is not a valid function.', 0, $previous);
 	}
 
 	public static function givenFunctionIsNotAValidSerializer(\ReflectionFunction $fnR)
 	{
 		return new self('Given function is not valid serializer / deserializer. See docs for how it should look like. '
-			. "[" . basename($fnR->getFileName()) . "] " . $fnR->getName() . ":" . $fnR->getStartLine() . "-" . $fnR->getEndLine());
+			. "["
+				. ($fnR->getFileName() === FALSE
+					? 'unknown path'
+					: basename($fnR->getFileName())
+				)
+			. "] "
+			. $fnR->getName()
+			. ":"
+			. $fnR->getStartLine() . "-" . $fnR->getEndLine()
+		);
 	}
 }
 
@@ -315,12 +324,17 @@ class ClosureExternalSerializerException extends UsageException {
 		return new self($fnR, 'Serializer accepts null values in parameters.');
 	}
 
-	public static function missingReturnType($fnR)
+	public static function missingReturnType(\ReflectionFunction $fnR)
 	{
 		return new self($fnR, 'Serializer does not have return type.');
 	}
 
-	public static function canReturnNull($fnR)
+	public static function canReturnNull(\ReflectionFunction $fnR)
+	{
+		return new self($fnR, 'Serializer cannot return null.');
+	}
+
+	public static function doesNotSpecifyReturnType(\ReflectionFunction $fnR)
 	{
 		return new self($fnR, 'Serializer cannot return null.');
 	}
