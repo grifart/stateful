@@ -20,7 +20,7 @@ class PayloadProcessorTest extends TestCase
 
 	private function provideProcessor(array $serializers = []): PayloadProcessor
 	{
-		return new PayloadProcessor(new TrivialMapper(), SerializerList::from($serializers));
+		return new PayloadProcessor(new TrivialMapper(), SerializerList::from(...$serializers));
 	}
 
 	public function testEmptyClass(): void
@@ -38,7 +38,8 @@ class PayloadProcessorTest extends TestCase
 	{
 		$processor = new PayloadProcessor(
 			new TrivialMapper(),
-			SerializerList::from([ // Make stateful externally:
+			SerializerList::from(
+				// Make stateful externally:
 
 				// Datetime:
 				/** @matchSubtypes */
@@ -59,8 +60,8 @@ class PayloadProcessorTest extends TestCase
 					}
 
 					throw new \Exception("Version is not supported");
-				},
-			])
+				}
+			)
 		);
 		$testClass = new TestClasses\ObjectWithUnserializableDateTimeImmutable;
 

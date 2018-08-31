@@ -55,10 +55,10 @@ final class SerializerList implements Serializer
 	 * to match also subtypes of (de)serialized class. Read docs before using this.
 	 * This can easily become tricky and counterintuitive.
 	 *
-	 * @param \Closure[] $externalSerializers List of (de)serializer closures
+	 * @param \Closure ...$externalSerializers List of (de)serializer closures
 	 * @return \Grifart\Stateful\ExternalSerializer\SerializerList
 	 */
-	public static function from(array $externalSerializers): self
+	public static function from(\Closure ...$externalSerializers): self
 	{
 		$list = new self;
 

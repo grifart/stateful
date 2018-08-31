@@ -150,7 +150,7 @@ class ObjectStorageTest extends TestCase
 	 */
 	private function provideProcessor(): PayloadProcessor
 	{
-		return new PayloadProcessor(new TrivialMapper(), SerializerList::from([
+		return new PayloadProcessor(new TrivialMapper(), SerializerList::from(
 
 			/** @matchSubtypes */
 			function (IVatRate $rate): State {
@@ -164,9 +164,9 @@ class ObjectStorageTest extends TestCase
 				assert($state->getVersion() === 1);
 
 				return VatRate::unserialize($state['rate']);
-			},
+			}
 
-		]));
+		));
 	}
 
 
