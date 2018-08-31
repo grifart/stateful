@@ -8,7 +8,7 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-$mapper = new SimpleMapper('MyApp\\Model\\Domain\\Events', 'Events', '.');
+$mapper = new SimpleMapper('MyApp\\Model\\Domain\\Events', 'Events.', '.');
 
 
 // To transfer name

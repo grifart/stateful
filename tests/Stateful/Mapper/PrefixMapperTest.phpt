@@ -10,7 +10,7 @@ use Tester\Assert;
 require __DIR__ . '/../../bootstrap.php';
 
 $mapper = new PrefixMapper("Prefix.", [
-	new SimpleMapper('MyApp\\Model\\Domain\\Events', 'Events', '.')
+	new SimpleMapper('MyApp\\Model\\Domain\\Events', 'Events.', '.')
 ]);
 
 

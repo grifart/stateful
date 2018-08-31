@@ -57,8 +57,7 @@ final class SimpleMapper implements Mapper
 		}
 
 
-		return $this->transferPrefix . $this->transferNamespaceSeparator .
-			str_replace($this->namespaceSeparator, $this->transferNamespaceSeparator, $rest);
+		return $this->transferPrefix . str_replace($this->namespaceSeparator, $this->transferNamespaceSeparator, $rest);
 	}
 
 
@@ -70,24 +69,19 @@ final class SimpleMapper implements Mapper
 	 */
 	public function toFullyQualifiedName(string $transferName): ?string
 	{
-		if (strlen($this->transferNamespaceSeparator) !== 1) {
-			throw MapperException::namespaceSeparatorMustHaveOneCharacterOnly();
-		}
-
-		if(!$this->startsWith($transferName, $this->transferPrefix . $this->transferNamespaceSeparator)) {
+		if(!$this->startsWith($transferName, $this->transferPrefix)) {
 			return NULL;
 		}
 
 		$rest = substr($transferName, strlen($this->transferPrefix));
-		$rest = ltrim($rest, $this->transferNamespaceSeparator);
 
 		return $this->namespacePrefix . $this->namespaceSeparator . str_replace($this->transferNamespaceSeparator, $this->namespaceSeparator, $rest);
 	}
 
 
-	private function startsWith(string $string, string $query)
+	private function startsWith(string $string, string $query): bool
 	{
-		return strpos($string, $query) === 0;
+		return $query === '' || strpos($string, $query) === 0;
 	}
 
 }
