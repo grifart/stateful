@@ -169,7 +169,7 @@ final class PayloadProcessor
 	 * Use general {@see \Grifart\Stateful\Exceptions\PayloadParserException} to catch them all!
 	 *
 	 * @param \Grifart\Stateful\Payload $payload
-	 * @return object
+	 * @return object|array
 	 *
 	 * @throws \Grifart\Stateful\Exceptions\ClassNameMappingException Cannot covert transfer class name to real runtime class name.
 	 * @throws \Grifart\Stateful\Exceptions\ClassNotFoundException Cannot find class name in runtime.
