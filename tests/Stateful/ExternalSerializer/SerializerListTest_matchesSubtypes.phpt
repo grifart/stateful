@@ -34,12 +34,12 @@ $unserializer = function (State $state): \DateTimeInterface {
 
 
 // SERIALIZER:
-$list1 = SerializerList::from([$serializer]);
+$list1 = SerializerList::from($serializer);
 Assert::type(State::class, $list1->extractState(new \DateTime()));
 Assert::type(State::class, $list1->extractState(new \DateTimeImmutable()));
 
 // UNSERIALIZER:
-$list2 = SerializerList::from([$unserializer]);
+$list2 = SerializerList::from($unserializer);
 $objectState_dateTime = new State(\DateTime::class, 1, ['date' => '2017-02-22T14:28:05+00:00']);
 $objectState_dateTimeImmutable = new State(\DateTimeImmutable::class, 1, ['date' => '2017-02-22T14:28:05+00:00']);
 Assert::type(\DateTime::class, $list2->reconstructFromState($objectState_dateTime));
