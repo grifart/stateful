@@ -13,9 +13,9 @@ require __DIR__ . '/../../bootstrap.php';
 // todo: If the have something like prefix mapper, we can actually proof that the will be no such conflict.
 
 $original = MapperList::from(
-	new SimpleMapper('A\\a', 'a', '.'),
-	new SimpleMapper('A\\b', 'b', '.'),
-	new SimpleMapper('A\\c', 'a', '.')
+	new SimpleMapper('A\\a', 'a.', '.'),
+	new SimpleMapper('A\\b', 'b.', '.'),
+	new SimpleMapper('A\\c', 'a.', '.')
 );
 
 $uut = new ReflexivityCheckingMapper($original);
