@@ -55,7 +55,7 @@ final class SerializerList implements Serializer
 	 * to match also subtypes of (de)serialized class. Read docs before using this.
 	 * This can easily become tricky and counterintuitive.
 	 *
-	 * @param callable[] $externalSerializers List of (de)serializer closures
+	 * @param \Closure[] $externalSerializers List of (de)serializer closures
 	 * @return \Grifart\Stateful\ExternalSerializer\SerializerList
 	 */
 	public static function from(array $externalSerializers): self
@@ -100,7 +100,7 @@ final class SerializerList implements Serializer
 
 
 	/** Is given closure valid (de)serializer? */
-	private static function checkClosure(callable $function): array
+	private static function checkClosure(\Closure $function): array
 	{
 		try {
 			$fnR = new \ReflectionFunction($function);
@@ -133,6 +133,9 @@ final class SerializerList implements Serializer
 		}
 
 		$returnTypeReflection = $fnR->getReturnType();
+		if ($returnTypeReflection === NULL) {
+			throw ClosureExternalSerializerException::doesNotSpecifyReturnType($fnR);
+		}
 		if ($returnTypeReflection->allowsNull()) {
 			throw ClosureExternalSerializerException::canReturnNull($fnR);
 		}
