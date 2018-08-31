@@ -199,6 +199,11 @@ final class MapperException extends UsageException {
 	{
 		return new self('Namespace separator must have one character only.');
 	}
+
+	public static function invalidClassNameGiven(string $className): self
+	{
+		return new self("Invalid class name given '$className'.");
+	}
 }
 
 final class ExternalSerializerException extends UsageException {
