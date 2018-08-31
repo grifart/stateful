@@ -286,9 +286,9 @@ final class PayloadProcessorException extends UsageException {
 		return new self("You have created object '$createdClassType' of different type that was original object '$originalClassType'.");
 	}
 
-	public static function onlyObjectsCanBeConvertedToPayload(string $type): self
+	public static function onlyObjectsAndArraysCanBeConvertedToPayload(string $type): self
 	{
-		return new self("Only objects can be converted to payload. '$type' given.");
+		return new self("Only objects and arrays can be converted to payload. '$type' given.");
 	}
 
 	public static function unsupportedPayloadVersion(int $payloadVersion, ?int $expectedVersion = NULL): self
