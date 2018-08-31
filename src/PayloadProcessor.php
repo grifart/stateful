@@ -44,14 +44,14 @@ final class PayloadProcessor
 	 * Converts given object into primitive structure composed of scalars and arrays.
 	 * Result will be also normalized. This simplifies comparisons of results.
 	 *
-	 * @param object $value
+	 * @param object|array $value
 	 *
 	 * @return \Grifart\Stateful\Payload Original data in serializable form
 	 */
 	public function toPayload($value): Payload
 	{
-		if(!is_object($value)) {
-			PayloadProcessorException::onlyObjectsCanBeConvertedToPayload(gettype($value));
+		if(!is_object($value) && !\is_array($value)) {
+			throw PayloadProcessorException::onlyObjectsAndArraysCanBeConvertedToPayload(gettype($value));
 		}
 
 		$primitivizedData = $this->_toPayload($value);
