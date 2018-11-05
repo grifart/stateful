@@ -249,7 +249,7 @@ If you answered 'yes' to all conditions above, you can use external serializer w
 📌 Use external serializers with `@matchSubtypes` as the last option 
 as there is no way on the type-system level to check if extracted state is complete for every possible subtype
 
-### Known valid use-cases:
+### Known valid use-cases:
 
 **Enumeration classes**
 
