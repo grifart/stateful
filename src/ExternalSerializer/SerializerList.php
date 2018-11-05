@@ -8,6 +8,7 @@ namespace Grifart\Stateful\ExternalSerializer;
 
 use Grifart\Stateful\Exceptions\ClosureExternalSerializerException;
 use Grifart\Stateful\Exceptions\ExternalSerializerException;
+use Grifart\Stateful\Exceptions\UsageException;
 use Grifart\Stateful\State;
 
 /**
@@ -64,35 +65,23 @@ final class SerializerList implements Serializer
 
 		foreach ($externalSerializers AS $function) {
 
-			/** @var bool $matchSubtypes */
-			/** @var \ReflectionFunction $functionReflection */
-			/** @var string $parameterType */
-			/** @var string $returnType */
-			[$functionReflection, $matchSubtypes, $parameterType, $returnType] = self::checkClosure($function);
+			$convertedClosure = self::checkClosure($function);
 
-			if ($returnType === State::class) {
-				// state extractor
-				$list->addSerializer(
-					new ClosureSerializer(
-						$function,
-							$parameterType,
-						$matchSubtypes
-					)
-				);
+			if ($convertedClosure instanceof ClosureSerializer) {
+				$list->addSerializer($convertedClosure);
+				continue;
 
-			} elseif ($parameterType === State::class) {
-				// object constructor from state
-				$list->addDeserializer(
-					new ClosureDeserializer(
-						$function,
-							$returnType,
-						$matchSubtypes
-					)
-				);
-
-			} else {
-				ExternalSerializerException::givenFunctionIsNotAValidSerializer($functionReflection);
 			}
+
+			if ($convertedClosure instanceof ClosureDeserializer) {
+				$list->addDeserializer($convertedClosure);
+				continue;
+
+			}
+
+			throw new UsageException(
+				'Internal error: check closure returned different type then it should.'
+			);
 		}
 
 		return $list;
@@ -100,7 +89,7 @@ final class SerializerList implements Serializer
 
 
 	/** Is given closure valid (de)serializer? */
-	private static function checkClosure(\Closure $function): array
+	private static function checkClosure(\Closure $function)
 	{
 		try {
 			$fnR = new \ReflectionFunction($function);
@@ -141,6 +130,42 @@ final class SerializerList implements Serializer
 		}
 		assert($returnTypeReflection instanceof \ReflectionNamedType);
 		$returnType = $returnTypeReflection->getName();
+
+		$isConcreteClass = function (string $type) {
+			$typeR = new \ReflectionClass($type);
+			return !$typeR->isInterface() && !$typeR->isAbstract();
+		};
+
+		if ($returnType === State::class) {
+			if ($matchSubtypes === FALSE && !$isConcreteClass($parameterType)) {
+				throw ExternalSerializerException::serializerForInterfaceDoesNotMakeSense($parameterType);
+			}
+
+			// state extractor
+			return new ClosureSerializer(
+				$function,
+				$parameterType,
+				$matchSubtypes
+			);
+
+		}
+
+		if ($parameterType === State::class) {
+			if ($matchSubtypes === FALSE && !$isConcreteClass($returnType)) {
+				throw ExternalSerializerException::serializerForInterfaceDoesNotMakeSense($parameterType);
+			}
+
+			// object constructor from state
+			return new ClosureDeserializer(
+				$function,
+				$returnType,
+				$matchSubtypes
+			);
+
+		}
+
+		throw ExternalSerializerException::givenFunctionIsNotAValidSerializer($fnR);
+
 
 		return [$fnR, $matchSubtypes, $parameterType, $returnType];
 	}
