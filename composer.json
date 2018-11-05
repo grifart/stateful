@@ -2,6 +2,17 @@
 	"name": "grifart/stateful",
 	"type": "library",
 	"description": "Serializes any object into primitive types and arrays.",
+	"scripts": {
+		"verify": [
+			"composer run syntax-check",
+			"composer run phpstan",
+			"composer run tester"
+		],
+		"tester": "vendor/bin/tester -c tests/php-unix.ini tests/Stateful",
+		"phpstan": "vendor/bin/phpstan analyze -c phpstan.neon --ansi --no-progress --no-interaction --level max src",
+		"syntax-check": "vendor/bin/parallel-lint src tests"
+	},
+
 	"require": {
 		"php": ">= 7.1.0",
 		"php-ds/php-ds": "^1.1",
@@ -10,7 +21,10 @@
 	},
 	"require-dev": {
 		"nette/tester": "^2.0.0",
-		"mockery/mockery": "^1.0.0"
+		"mockery/mockery": "^1.0.0",
+		"phpstan/phpstan": "^0.10.5",
+		"jakub-onderka/php-parallel-lint": "^1.0",
+		"jakub-onderka/php-console-highlighter": "^0.4.0"
 	},
 	"autoload": {
 		"psr-4": {
