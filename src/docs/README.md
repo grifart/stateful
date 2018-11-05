@@ -236,3 +236,29 @@ It is good idea to prepend version number to serialized class name. This provide
 
 You can continuously move to new naming and still support old names by providing on-way name router. This allows you keep your legacy names organized and separate from new ones.
 
+## External serializers with matching sub-types
+
+If
+ - [ ] you cannot implement `Stateful` interface on base class (e.g. is in 3rd party code)
+ - [ ] implementing external serializer for every type becomes impractical
+ - [ ] super-type constraints all sub-types enough, that you are able to extract state of every possible class instance of any sub-type
+ - [ ] you are able to extract state ≫only≪ using super-type interface
+
+If you answered 'yes' to all conditions above, you can use external serializer with `@matchSubtypes` annotation. This allows usage of annotated serializer for all sub-types.
+
+📌 Use external serializers with `@matchSubtypes` as the last option 
+as there is no way on the type-system level to check if extracted state is complete for every possible subtype
+
+### Known valid use-cases:
+
+**Enumeration classes**
+
+- ✓ There are many enum types in the app and they has a common base class or an interface. 
+- ✓ Enum base class is in another library so we cannot implement Stateful interface on the base class.
+- ✓ Enumeration by definition says that if we remember value identifier, we can reconstruct any value without loosing information.
+
+
+# Further reading
+
+- [Using external serializers with inheritance and interfaces](ExternalSerializersAndInheritance.md)
+

@@ -252,11 +252,20 @@ final class PayloadProcessorException extends UsageException {
 	public static function objectIsNotSerializable_noSerializerFound(string $class): self
 	{
 		return new self(
-			  "'$class' is not serializable. Object is not stateful and no external serializer was provided for given type. "
-			  . "Please note that external serializers must match type exactly.\n\n"
-			  . "If you need to match subtypes you can:\n"
-			  . "  - implement stateful interface --> this makes serializable automatically all subclasses (recommended)\n"
-			  . '  - for external serializer use annotation for matching subtypes (read the docs; there are gotchas!)'
+			  "'$class' is not serializable. Object does not implement stateful interface and no external serializer was provided for given type.\n\n"
+
+			  . "What to do?\n"
+			  . "  ⒜ implement Stateful interface on given type (or super-type)\n"
+			  . "  ⒝ when ⒜ is not possible (e.g. class is in 3rd party code), provide external serializer for given type.\n"
+			  . "\n"
+
+			  . 'Please note that external serializers should match type exactly (more below). '
+			  . "External serializer serializes class instances, so you should provide serializer for every class ≫implementation≪ (=for every type). \n"
+			  . "\n"
+			  . "\n"
+
+			  . 'For some special cases you can use external serializers with subtypes matching. See the docs for more (section "External serializers with matching sub-types").'
+
 		);
 	}
 
