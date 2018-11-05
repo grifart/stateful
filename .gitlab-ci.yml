@@ -22,7 +22,7 @@ test.tests:
 
   dependencies: [build.composer]
   script:
-    - vendor/bin/tester -c tests/php-unix.ini tests/Stateful
+    - composer run tester
 
 
 test.phpstan:
@@ -30,10 +30,8 @@ test.phpstan:
   tags: [grifart/php7.1-with-gulp-and-all-php-modules]
 
   dependencies: [build.composer]
-  before_script:
-    - composer global require phpstan/phpstan-shim
   script:
-    - phpstan.phar analyze -c phpstan.neon --ansi --no-progress --no-interaction --level 7 src
+    - composer run phpstan
 
 
 test.linter:
@@ -41,7 +39,5 @@ test.linter:
   tags: [grifart/php7.1-with-gulp-and-all-php-modules]
 
   dependencies: [build.composer]
-  before_script:
-    - composer global require jakub-onderka/php-parallel-lint jakub-onderka/php-console-highlighter
   script:
-    - parallel-lint src tests
+    - composer run syntax-check
