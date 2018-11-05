@@ -34,7 +34,6 @@ final class ClosureSerializer
 		}
 
 		// match subtypes
-		// reflection thing is a little hack to make instanceof working properly
 		return $objectInstance instanceof $this->forType;
 	}
 
