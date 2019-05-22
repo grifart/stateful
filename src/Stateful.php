@@ -25,7 +25,7 @@ interface Stateful
 	 * Use array access to receive object state
 	 *
 	 * @param State $state state of your object before serialization
-	 * @return static
+	 * @return self
 	 *
 	 * @internal this method should be used for deserialization purposes
 	 */
