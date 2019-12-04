@@ -121,11 +121,11 @@ final class SerializerList implements Serializer
 		assert($param instanceof \ReflectionParameter);
 
 		$paramTypeR = $param->getType();
-		assert($paramTypeR instanceof \ReflectionType);
+		assert($paramTypeR instanceof \ReflectionNamedType);
 		if ($paramTypeR->allowsNull()) {
 			throw ClosureExternalSerializerException::allowsNullToBeAnParameter($fnR);
 		}
-		$parameterType = (string) $paramTypeR;
+		$parameterType = $paramTypeR->getName();
 
 		// RETURN TYPE:
 		if (!$fnR->hasReturnType()) {
@@ -139,7 +139,9 @@ final class SerializerList implements Serializer
 		if ($returnTypeReflection->allowsNull()) {
 			throw ClosureExternalSerializerException::canReturnNull($fnR);
 		}
-		$returnType = (string) $fnR->getReturnType();
+		assert($returnTypeReflection instanceof \ReflectionNamedType);
+		$returnType = $returnTypeReflection->getName();
+
 		return [$fnR, $matchSubtypes, $parameterType, $returnType];
 	}
 

@@ -5,7 +5,7 @@ stages:
 
 build.composer:
   stage: build
-  tags: [grifart/php7.1-with-gulp-and-all-php-modules]
+  tags: [grifart/php7.4-with-gulp-and-all-php-modules]
 
   script:
     - composer install --ansi --no-interaction --prefer-dist
@@ -18,7 +18,7 @@ build.composer:
 
 test.tests:
   stage: test
-  tags: [grifart/php7.1-with-gulp-and-all-php-modules]
+  tags: [grifart/php7.4-with-gulp-and-all-php-modules]
 
   dependencies: [build.composer]
   script:
@@ -27,7 +27,7 @@ test.tests:
 
 test.phpstan:
   stage: test
-  tags: [grifart/php7.1-with-gulp-and-all-php-modules]
+  tags: [grifart/php7.4-with-gulp-and-all-php-modules]
 
   dependencies: [build.composer]
   script:
@@ -36,7 +36,7 @@ test.phpstan:
 
 test.linter:
   stage: test
-  tags: [grifart/php7.1-with-gulp-and-all-php-modules]
+  tags: [grifart/php7.4-with-gulp-and-all-php-modules]
 
   dependencies: [build.composer]
   script:
