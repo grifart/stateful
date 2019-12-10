@@ -18,6 +18,8 @@ use function Interop\EqualableUtils\equals;
  *
  * This state container MUST NEVER be used outside original object that generated it.
  * (otherwise this will break encapsulation of source object)
+ *
+ * @implements \Iterator<string,mixed>
  */
 final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 {
