@@ -37,15 +37,5 @@
 		"psr-4": {
 			"Grifart\\Stateful\\": "tests/Stateful"
 		}
-	},
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "git@gitlab.grifart.local:grifart-internal/comparable-polyfill.git"
-		},
-		{
-			"type": "vcs",
-			"url": "git@gitlab.grifart.local:grifart-internal/equalable-utils.git"
-		}
-	]
+	}
 }
