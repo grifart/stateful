@@ -133,7 +133,7 @@ final class ObjectStateException extends UsageException {
 	public static function forgottenProperty(array $propertyNames, string $class): self
 	{
 		$propertyNameStringList = implode(', ', $propertyNames);
-		return new self("You have forgotten to serialize/deserialized properties '$propertyNameStringList' in class '$class'. Every property must be explicitly serialized or ignored.");
+		return new self("You have forgotten to serialize/deserialize following properties '$propertyNameStringList' in class '$class'. Every property must be explicitly serialized or ignored.");
 	}
 
 	public static function accessedStatePropertyThatDoesNotExists(string $offset, string $getClassName): self
