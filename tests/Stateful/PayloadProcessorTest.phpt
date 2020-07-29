@@ -8,6 +8,8 @@ namespace Grifart\Stateful;
 use Grifart\Stateful\Exceptions\MalformedPayloadException;
 use Grifart\Stateful\ExternalSerializer\SerializerList;
 use Grifart\Stateful\Mapper\TrivialMapper;
+use Grifart\Stateful\RemovedClassesDeserializer\RemovedClass;
+use Grifart\Stateful\RemovedClassesDeserializer\RemovedClassesDeserializer;
 use Grifart\Stateful\TestClasses;
 use Tester\Assert;
 use Tester\TestCase;
@@ -18,9 +20,16 @@ require_once __DIR__ . '/PayloadProcessorTest_testClasses.php';
 class PayloadProcessorTest extends TestCase
 {
 
-	private function provideProcessor(array $serializers = []): PayloadProcessor
+	private function provideProcessor(
+		array $serializers = [],
+		array $removedClassesDeserializers = []
+	): PayloadProcessor
 	{
-		return new PayloadProcessor(new TrivialMapper(), SerializerList::from(...$serializers));
+		return new PayloadProcessor(
+			new TrivialMapper(),
+			SerializerList::from(...$serializers),
+			RemovedClassesDeserializer::from($removedClassesDeserializers)
+		);
 	}
 
 	public function testEmptyClass(): void
@@ -311,6 +320,43 @@ class PayloadProcessorTest extends TestCase
 				]
 			))
 		);
+	}
+
+	public function test_deserialization_removedClass(): void
+	{
+		$processor = $this->provideProcessor([], [
+			'RemovedClassWithDefaultDeserializer',
+			'RemovedClassWithCustomDeserializer' => static function (State $state) {
+				return $state['value'];
+			},
+		]);
+
+		Assert::same(
+			42,
+			$processor->fromPayload(new Payload(
+				[
+					'@(meta)' => [
+						'type' => 'object',
+						'name' => 'RemovedClassWithCustomDeserializer',
+						'serializationVersion' => 1,
+					],
+					'value' => 42,
+				]
+			))
+		);
+
+		$removedClassWithDefaultDeserializer = $processor->fromPayload(new Payload(
+			[
+				'@(meta)' => [
+					'type' => 'object',
+					'name' => 'RemovedClassWithDefaultDeserializer',
+					'serializationVersion' => 1,
+				],
+				'value' => 42,
+			]
+		));
+		Assert::type(RemovedClass::class, $removedClassWithDefaultDeserializer);
+		Assert::same(42, $removedClassWithDefaultDeserializer->value);
 	}
 }
 
