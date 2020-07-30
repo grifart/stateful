@@ -33,10 +33,7 @@ final class ClosureDeserializer
 			return $type === $this->forType;
 		}
 
-		// match subtypes
-		// reflection thing is a little hack to make instanceof working properly
-		$emptyClassInstance = (new \ReflectionClass($type))->newInstanceWithoutConstructor();
-		return $emptyClassInstance instanceof $this->forType;
+		return is_a($type, $this->forType, TRUE);
 	}
 
 	/**

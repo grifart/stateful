@@ -9,6 +9,7 @@ use Grifart\Stateful\Exceptions\NoAppropriateDeserializerFoundException;
 use Grifart\Stateful\Exceptions\PayloadProcessorException;
 use Grifart\Stateful\ExternalSerializer\Serializer;
 use Grifart\Stateful\Mapper\Mapper;
+use Grifart\Stateful\RemovedClassesDeserializer\RemovedClassesDeserializer;
 
 
 /**
@@ -26,15 +27,23 @@ final class PayloadProcessor
 	/** @var Serializer */
 	private $externalSerializer;
 
+	/** @var RemovedClassesDeserializer */
+	private $removedClassesDeserializer;
+
 	/**
 	 * PayloadProcessor constructor.
 	 * @param Mapper     $mapper
 	 * @param Serializer $externalSerializer Used for otherwise unserializable objects (e.g. datetime)
 	 */
-	public function __construct(Mapper $mapper, Serializer $externalSerializer)
+	public function __construct(
+		Mapper $mapper,
+		Serializer $externalSerializer,
+		?RemovedClassesDeserializer $removedClassesDeserializer = NULL
+	)
 	{
-		$this->externalSerializer = $externalSerializer;
 		$this->mapper = $mapper;
+		$this->externalSerializer = $externalSerializer;
+		$this->removedClassesDeserializer = $removedClassesDeserializer ?? RemovedClassesDeserializer::from([]);
 	}
 
 
@@ -44,7 +53,7 @@ final class PayloadProcessor
 	 * Converts given object into primitive structure composed of scalars and arrays.
 	 * Result will be also normalized. This simplifies comparisons of results.
 	 *
-	 * @param object|array $value
+	 * @param object|array|mixed $value
 	 *
 	 * @return \Grifart\Stateful\Payload Original data in serializable form
 	 */
@@ -244,12 +253,11 @@ final class PayloadProcessor
 			throw ClassNameMappingException::cannotConvertTransferNameToClassName($meta->getTransferClassName());
 		}
 
-		if (!class_exists($className)) {
+		if ( ! $this->removedClassesDeserializer->canDeserialize($className) && ! class_exists($className)) {
 			throw ClassNotFoundException::classNameDeliverFromTransferName($className, $meta->getTransferClassName());
 		}
-		$classReflection = new \ReflectionClass($className);
-		$interfaces = $classReflection->getInterfaceNames();
-		$isStatefulObject = in_array(Stateful::class, $interfaces, TRUE);
+
+		$isStatefulObject = \is_a($className, Stateful::class, TRUE);
 
 		// reconstruct object state
 		// DFS for data: we need to have reconstructed all sub-object to construct their parents
@@ -277,7 +285,7 @@ final class PayloadProcessor
 			return $createdObject;
 		}
 
-		throw NoAppropriateDeserializerFoundException::for($className);
+		return $this->removedClassesDeserializer->deserialize($objectState);
 	}
 
 	private static function extractMetadata(array $data): array
