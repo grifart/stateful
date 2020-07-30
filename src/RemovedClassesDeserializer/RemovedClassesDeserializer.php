@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Grifart\Stateful\RemovedClassesDeserializer;
 
 use Grifart\Stateful\Exceptions\NoAppropriateDeserializerFoundException;
+use Grifart\Stateful\Exceptions\RemovedClassesDeserializerException;
 use Grifart\Stateful\State;
 use Grifart\Stateful\Stateful;
 
@@ -20,7 +21,9 @@ final class RemovedClassesDeserializer
 	private function __construct(array $deserializers)
 	{
 		foreach (\array_keys($deserializers) as $className) {
-			\assert( ! \class_exists($className));
+			if (\class_exists($className)) {
+				throw RemovedClassesDeserializerException::deserializedClassExists($className);
+			}
 		}
 
 		$this->deserializers = $deserializers;
@@ -66,7 +69,9 @@ final class RemovedClassesDeserializer
 		$deserializer = $this->deserializers[$className];
 
 		$result = $deserializer($state);
-		\assert( ! \is_object($result) || ! $result instanceof Stateful);
+		if (\is_object($result) && $result instanceof Stateful) {
+			throw RemovedClassesDeserializerException::deserializedValueCannotBeStateful($className, $result);
+		}
 
 		return $result;
 	}

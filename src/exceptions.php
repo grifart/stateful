@@ -4,6 +4,7 @@ namespace Grifart\Stateful\Exceptions;
 
 use Grifart\Stateful\PayloadProcessor;
 use Grifart\Stateful\State;
+use Grifart\Stateful\Stateful;
 
 
 // library root exceptions:
@@ -351,6 +352,28 @@ class ClosureExternalSerializerException extends UsageException {
 	public static function doesNotSpecifyReturnType(\ReflectionFunction $fnR)
 	{
 		return new self($fnR, 'Serializer cannot return null.');
+	}
+}
+
+final class RemovedClassesDeserializerException extends UsageException
+{
+	public static function deserializedValueCannotBeStateful(string $className, object $value): self
+	{
+		return new self(\sprintf(
+			'A deserializer for removed class %s returned an instance of %s which implements the Stateful interface. '
+				. 'This is disallowed to make sure that the deserialized value cannot be serialized again.',
+			$className,
+			\get_class($value)
+		));
+	}
+
+	public static function deserializedClassExists(string $className): self
+	{
+		return new self(\sprintf(
+			'Cannot register a deserializer for a removed class %s because the class with given name actually exists. '
+				. 'Did you forget to remove the class?',
+			$className
+		));
 	}
 }
 
