@@ -3,6 +3,7 @@
 namespace Grifart\Stateful\RemovedClassesDeserializer;
 
 use Grifart\Stateful\Exceptions\NoAppropriateDeserializerFoundException;
+use Grifart\Stateful\Exceptions\RemovedClassException;
 use Grifart\Stateful\State;
 use Tester\Assert;
 
@@ -19,6 +20,9 @@ $someClassState = new State(SomeRemovedClass::class, 1, ['field' => 'value']);
 $deserializedSomeClass = $removedClassesDeserializer->deserialize($someClassState);
 Assert::type(RemovedClass::class, $deserializedSomeClass);
 Assert::same('value', $deserializedSomeClass->field);
+Assert::throws(function () use ($deserializedSomeClass): void {
+	$deserializedSomeClass->bar;
+}, RemovedClassException::class, 'Cannot access unknown property RemovedClass::$bar.');
 
 $anotherClassState = new State(AnotherRemovedClass::class, 1, ['anotherField' => 'anotherValue']);
 $deserializedAnotherClass = $removedClassesDeserializer->deserialize($anotherClassState);

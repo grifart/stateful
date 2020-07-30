@@ -50,7 +50,7 @@ final class RemovedClassesDeserializer
 
 	public function canDeserialize(string $className): bool
 	{
-		return \in_array($className, \array_keys($this->deserializers), true);
+		return \array_key_exists($className, $this->deserializers);
 	}
 
 	/**

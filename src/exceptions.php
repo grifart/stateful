@@ -353,3 +353,16 @@ class ClosureExternalSerializerException extends UsageException {
 		return new self($fnR, 'Serializer cannot return null.');
 	}
 }
+
+final class RemovedClassException extends RuntimeException
+{
+	public static function unknownProperty(string $name): self
+	{
+		return new self("Cannot access unknown property RemovedClass::$$name.");
+	}
+
+	public static function removedClassIsImmutable(): self
+	{
+		return new self('Cannot modify RemovedClass, it is immutable by design.');
+	}
+}
