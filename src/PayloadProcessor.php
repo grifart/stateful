@@ -27,7 +27,7 @@ final class PayloadProcessor
 	/** @var Serializer */
 	private $externalSerializer;
 
-	/** @var ?RemovedClassesDeserializer */
+	/** @var RemovedClassesDeserializer */
 	private $removedClassesDeserializer;
 
 	/**
@@ -43,7 +43,7 @@ final class PayloadProcessor
 	{
 		$this->mapper = $mapper;
 		$this->externalSerializer = $externalSerializer;
-		$this->removedClassesDeserializer = $removedClassesDeserializer;
+		$this->removedClassesDeserializer = $removedClassesDeserializer ?? RemovedClassesDeserializer::from([]);
 	}
 
 
@@ -253,12 +253,7 @@ final class PayloadProcessor
 			throw ClassNameMappingException::cannotConvertTransferNameToClassName($meta->getTransferClassName());
 		}
 
-		if ((
-				$this->removedClassesDeserializer === NULL
-				|| ! $this->removedClassesDeserializer->canDeserialize($className)
-			)
-			&& ! class_exists($className)
-		) {
+		if ( ! $this->removedClassesDeserializer->canDeserialize($className) && ! class_exists($className)) {
 			throw ClassNotFoundException::classNameDeliverFromTransferName($className, $meta->getTransferClassName());
 		}
 
@@ -290,11 +285,7 @@ final class PayloadProcessor
 			return $createdObject;
 		}
 
-		if ($this->removedClassesDeserializer !== NULL) {
-			return $this->removedClassesDeserializer->deserialize($objectState);
-		}
-
-		throw NoAppropriateDeserializerFoundException::for($className);
+		return $this->removedClassesDeserializer->deserialize($objectState);
 	}
 
 	private static function extractMetadata(array $data): array
