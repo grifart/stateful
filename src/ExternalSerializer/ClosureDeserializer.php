@@ -28,7 +28,8 @@ final class ClosureDeserializer
 		$this->forType = $forType;
 	}
 
-	public function isUsableFor(string $type) {
+	public function isUsableFor(string $type): bool
+	{
 		if($this->matchSubtypes === FALSE) {
 			return $type === $this->forType;
 		}

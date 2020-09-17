@@ -71,7 +71,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 	}
 
 	/** @return \ReflectionProperty[] */
-	private static function getPropertiesForInstance($theInstance)
+	private static function getPropertiesForInstance($theInstance): array
 	{
 		return (new \ReflectionClass($theInstance))->getProperties();
 	}
@@ -246,7 +246,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 
 
 	//<editor-fold desc="Traversable, Countable, ArrayAccess interfaces implementation">
-	public function offsetExists($offset)
+	public function offsetExists($offset): bool
 	{
 		$this->setUsed($offset);
 		return isset($this->state[$offset]);
@@ -263,19 +263,19 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 		return $this->state[$offset];
 	}
 
-	public function offsetSet($offset, $value)
+	public function offsetSet($offset, $value): void
 	{
 		throw ObjectStateException::notAllowedToModifyObjectState($this->getClassName(), (string) $offset);
 	}
 
-	public function offsetUnset($offset)
+	public function offsetUnset($offset): void
 	{
 		throw ObjectStateException::notAllowedToModifyObjectState($this->getClassName(), (string) $offset);
 	}
 
 	// Countable interface:
 
-	public function count()
+	public function count(): int
 	{
 		return count($this->state);
 	}
@@ -376,7 +376,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 		return $object;
 	}
 
-	public function hasBeenVersionChecked()
+	public function hasBeenVersionChecked(): bool
 	{
 		return $this->wasVersionRetrieved;
 	}

@@ -17,7 +17,7 @@ final class RemovedClass
 		$this->data = $data;
 	}
 
-	public static function fromState(State $state)
+	public static function fromState(State $state): self
 	{
 		return new self(\iterator_to_array($state));
 	}

@@ -29,6 +29,6 @@ interface Stateful
 	 *
 	 * @internal this method should be used for deserialization purposes
 	 */
-	public static function _fromState(State $state);
+	public static function _fromState(State $state): self;
 
 }

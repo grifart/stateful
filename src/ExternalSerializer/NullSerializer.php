@@ -13,7 +13,7 @@ use Grifart\Stateful\State;
  */
 final class NullSerializer implements Serializer
 {
-	public static function getInstance()
+	public static function getInstance(): NullSerializer
 	{
 		static $instance;
 		if($instance !== NULL) {

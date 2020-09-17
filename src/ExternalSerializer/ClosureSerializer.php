@@ -28,7 +28,8 @@ final class ClosureSerializer
 		$this->forType = $forType;
 	}
 
-	public function isUsableFor($objectInstance) {
+	public function isUsableFor($objectInstance): bool
+	{
 		if($this->matchSubtypes === FALSE) {
 			return get_class($objectInstance) === $this->forType;
 		}
