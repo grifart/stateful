@@ -165,9 +165,6 @@ final class SerializerList implements Serializer
 		}
 
 		throw ExternalSerializerException::givenFunctionIsNotAValidSerializer($fnR);
-
-
-		return [$fnR, $matchSubtypes, $parameterType, $returnType];
 	}
 
 
