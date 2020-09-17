@@ -88,7 +88,10 @@ final class SerializerList implements Serializer
 	}
 
 
-	/** Is given closure valid (de)serializer? */
+	/**
+	 * Is given closure valid (de)serializer?
+	 * @return ClosureSerializer|ClosureDeserializer
+	 */
 	private static function checkClosure(\Closure $function)
 	{
 		try {
@@ -131,40 +134,46 @@ final class SerializerList implements Serializer
 		assert($returnTypeReflection instanceof \ReflectionNamedType);
 		$returnType = $returnTypeReflection->getName();
 
-		$isConcreteClass = function (string $type) {
+		$isSerializer = $returnType === State::class;
+		$isDeserializer = $parameterType === State::class;
+		\assert($isSerializer xor $isDeserializer);
+
+		if ( ! $matchSubtypes) {
+			// It does not make sense to register abstract class or interface for (de)serialization
+			// As by default we use precise type match.
+			self::checkInterfacesAndAbstractClasses(
+				$isSerializer
+					? $parameterType
+					: $returnType
+			);
+		}
+
+
+		return
+			$isSerializer
+				? new ClosureSerializer(
+					$function,
+					$parameterType,
+					$matchSubtypes
+				)
+				: new ClosureDeserializer(
+					$function,
+					$returnType,
+					$matchSubtypes
+				);
+	}
+
+	/** @throw ExternalSerializerException */
+	private static function checkInterfacesAndAbstractClasses(string $typeToValidate): void
+	{
+		$isConcreteClass = static function (string $type): bool {
 			$typeR = new \ReflectionClass($type);
 			return !$typeR->isInterface() && !$typeR->isAbstract();
 		};
 
-		if ($returnType === State::class) {
-			if ($matchSubtypes === FALSE && !$isConcreteClass($parameterType)) {
-				throw ExternalSerializerException::serializerForInterfaceDoesNotMakeSense($parameterType);
-			}
-
-			// state extractor
-			return new ClosureSerializer(
-				$function,
-				$parameterType,
-				$matchSubtypes
-			);
-
+		if ( ! $isConcreteClass($typeToValidate)) {
+			throw ExternalSerializerException::serializerForInterfaceDoesNotMakeSense($typeToValidate);
 		}
-
-		if ($parameterType === State::class) {
-			if ($matchSubtypes === FALSE && !$isConcreteClass($returnType)) {
-				throw ExternalSerializerException::serializerForInterfaceDoesNotMakeSense($parameterType);
-			}
-
-			// object constructor from state
-			return new ClosureDeserializer(
-				$function,
-				$returnType,
-				$matchSubtypes
-			);
-
-		}
-
-		throw ExternalSerializerException::givenFunctionIsNotAValidSerializer($fnR);
 	}
 
 

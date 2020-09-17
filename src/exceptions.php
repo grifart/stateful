@@ -232,7 +232,7 @@ final class ExternalSerializerException extends UsageException {
 	public static function serializerForInterfaceDoesNotMakeSense(string $parameterType): self
 	{
 		return new self(
-			'It does not make sense to have (de)serializer for an interface. '
+			'It does not make sense to have (de)serializer for an interface or abstract class. '
 			. "Provide (de)serializer for class implementations instead.\n"
 			. "\n"
 			. 'If you want to match all classes that implements an interface, '
