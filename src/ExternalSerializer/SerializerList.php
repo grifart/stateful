@@ -166,12 +166,9 @@ final class SerializerList implements Serializer
 	/** @throw ExternalSerializerException */
 	private static function checkInterfacesAndAbstractClasses(string $typeToValidate): void
 	{
-		$isConcreteClass = static function (string $type): bool {
-			$typeR = new \ReflectionClass($type);
-			return !$typeR->isInterface() && !$typeR->isAbstract();
-		};
-
-		if ( ! $isConcreteClass($typeToValidate)) {
+		$typeReflection = new \ReflectionClass($typeToValidate);
+		$isConcreteClass = !$typeReflection->isInterface() && !$typeReflection->isAbstract();
+		if ( ! $isConcreteClass) {
 			throw ExternalSerializerException::serializerForInterfaceDoesNotMakeSense($typeToValidate);
 		}
 	}
