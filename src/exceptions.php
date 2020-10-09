@@ -9,7 +9,7 @@ use Grifart\Stateful\Stateful;
 
 // library root exceptions:
 abstract class RuntimeException extends \RuntimeException {}
-abstract class UsageException extends \LogicException {}
+class UsageException extends \LogicException {}
 
 // ----------- Runtime exceptions (are part of public API therefore changing them changes public API) ------------------
 
@@ -226,6 +226,17 @@ final class ExternalSerializerException extends UsageException {
 			. $fnR->getName()
 			. ":"
 			. $fnR->getStartLine() . "-" . $fnR->getEndLine()
+		);
+	}
+
+	public static function serializerForInterfaceDoesNotMakeSense(string $parameterType): self
+	{
+		return new self(
+			'It does not make sense to have (de)serializer for an interface or abstract class. '
+			. "Provide (de)serializer for class implementations instead.\n"
+			. "\n"
+			. 'If you want to match all classes that implements an interface, '
+			. "please read the docs on 'matching subtypes' topic. There are gotchas, read it carefully."
 		);
 	}
 }

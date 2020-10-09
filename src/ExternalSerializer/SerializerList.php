@@ -8,6 +8,7 @@ namespace Grifart\Stateful\ExternalSerializer;
 
 use Grifart\Stateful\Exceptions\ClosureExternalSerializerException;
 use Grifart\Stateful\Exceptions\ExternalSerializerException;
+use Grifart\Stateful\Exceptions\UsageException;
 use Grifart\Stateful\State;
 
 /**
@@ -64,43 +65,34 @@ final class SerializerList implements Serializer
 
 		foreach ($externalSerializers AS $function) {
 
-			/** @var bool $matchSubtypes */
-			/** @var \ReflectionFunction $functionReflection */
-			/** @var string $parameterType */
-			/** @var string $returnType */
-			[$functionReflection, $matchSubtypes, $parameterType, $returnType] = self::checkClosure($function);
+			$convertedClosure = self::checkClosure($function);
 
-			if ($returnType === State::class) {
-				// state extractor
-				$list->addSerializer(
-					new ClosureSerializer(
-						$function,
-							$parameterType,
-						$matchSubtypes
-					)
-				);
+			if ($convertedClosure instanceof ClosureSerializer) {
+				$list->addSerializer($convertedClosure);
+				continue;
 
-			} elseif ($parameterType === State::class) {
-				// object constructor from state
-				$list->addDeserializer(
-					new ClosureDeserializer(
-						$function,
-							$returnType,
-						$matchSubtypes
-					)
-				);
-
-			} else {
-				ExternalSerializerException::givenFunctionIsNotAValidSerializer($functionReflection);
 			}
+
+			if ($convertedClosure instanceof ClosureDeserializer) {
+				$list->addDeserializer($convertedClosure);
+				continue;
+
+			}
+
+			throw new UsageException(
+				'Internal error: check closure returned different type then it should.'
+			);
 		}
 
 		return $list;
 	}
 
 
-	/** Is given closure valid (de)serializer? */
-	private static function checkClosure(\Closure $function): array
+	/**
+	 * Is given closure valid (de)serializer?
+	 * @return ClosureSerializer|ClosureDeserializer
+	 */
+	private static function checkClosure(\Closure $function)
 	{
 		try {
 			$fnR = new \ReflectionFunction($function);
@@ -142,7 +134,43 @@ final class SerializerList implements Serializer
 		assert($returnTypeReflection instanceof \ReflectionNamedType);
 		$returnType = $returnTypeReflection->getName();
 
-		return [$fnR, $matchSubtypes, $parameterType, $returnType];
+		$isSerializer = $returnType === State::class;
+		$isDeserializer = $parameterType === State::class;
+		\assert($isSerializer xor $isDeserializer);
+
+		if ( ! $matchSubtypes) {
+			// It does not make sense to register abstract class or interface for (de)serialization
+			// As by default we use precise type match.
+			self::checkInterfacesAndAbstractClasses(
+				$isSerializer
+					? $parameterType
+					: $returnType
+			);
+		}
+
+
+		return
+			$isSerializer
+				? new ClosureSerializer(
+					$function,
+					$parameterType,
+					$matchSubtypes
+				)
+				: new ClosureDeserializer(
+					$function,
+					$returnType,
+					$matchSubtypes
+				);
+	}
+
+	/** @throw ExternalSerializerException */
+	private static function checkInterfacesAndAbstractClasses(string $typeToValidate): void
+	{
+		$typeReflection = new \ReflectionClass($typeToValidate);
+		$isConcreteClass = !$typeReflection->isInterface() && !$typeReflection->isAbstract();
+		if ( ! $isConcreteClass) {
+			throw ExternalSerializerException::serializerForInterfaceDoesNotMakeSense($typeToValidate);
+		}
 	}
 
 
