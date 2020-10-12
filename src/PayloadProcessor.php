@@ -73,6 +73,10 @@ final class PayloadProcessor
 		return new Payload($primitivizedData);
 	}
 
+	/**
+	 * @param mixed $value
+	 * @return mixed
+	 */
 	private function _toPayload($value)
 	{
 		// every object must have been already replaced by State; if not error
@@ -110,11 +114,7 @@ final class PayloadProcessor
 	}
 
 
-	/**
-	 * @param object $object
-	 * @return State
-	 */
-	private function extractObjectState($object): State
+	private function extractObjectState(object $object): State
 	{
 		assert(is_object($object));
 
@@ -208,7 +208,12 @@ final class PayloadProcessor
 		return $this->_fromPayload($primitives);
 	}
 
-	private function _fromPayload(/*scalar|null|array*/ $data)//: scalar|null|array|object
+
+	/**
+	 * @param mixed $data
+	 * @return mixed
+	 */
+	private function _fromPayload($data)
 	{
 		// SCALARS:
 		if (is_scalar($data)) {
@@ -244,7 +249,10 @@ final class PayloadProcessor
 	}
 
 
-	private function fromPayload_object(array $serializedObjectFields, PayloadMetadata $meta)//: object
+	/**
+	 * @return mixed Doesn't have to be object if deserialized via RemovedClassDeserializer
+	 */
+	private function fromPayload_object(array $serializedObjectFields, PayloadMetadata $meta)
 	{
 		$stateVersion = $meta->getVersion();
 

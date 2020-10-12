@@ -38,7 +38,7 @@ class UsageException extends \LogicException {}
 
 		final class ClassNameMappingException extends PayloadParserException {
 
-			public static function cannotConvertTransferNameToClassName($transferName): self
+			public static function cannotConvertTransferNameToClassName(string $transferName): self
 			{
 				return new self("Cannot convert transfer class name $transferName to fully qualified class name. Did you registered it into name mapper?");
 			}
@@ -47,7 +47,7 @@ class UsageException extends \LogicException {}
 
 		final class ClassNotFoundException extends PayloadParserException {
 
-			public static function classNameDeliverFromTransferName($className, $transferName): self
+			public static function classNameDeliverFromTransferName(string $className, string $transferName): self
 			{
 				return new self("Class '$className' has not been found in runtime. Class name was derived from $transferName.");
 			}
@@ -56,7 +56,7 @@ class UsageException extends \LogicException {}
 
 		final class NoAppropriateDeserializerFoundException extends PayloadParserException {
 
-			public static function for($className): self
+			public static function for(string $className): self
 			{
 				return new self(
 					  "Cannot reconstructFromState '$className', no deserializer found. "
@@ -87,7 +87,7 @@ class UsageException extends \LogicException {}
 				return new self('Metadata field in payload is missing.');
 			}
 
-			public static function payloadRootMustBeAnArray($type): self
+			public static function payloadRootMustBeAnArray(string $type): self
 			{
 				return new self("Payload root must be an array. '$type' given.");
 			}
@@ -147,7 +147,7 @@ final class ObjectStateException extends UsageException {
 		return new self("It is not allowed to modify object state. ('$class'; $offset");
 	}
 
-	public static function cannotCreateClass_classNotFound($className): self
+	public static function cannotCreateClass_classNotFound(string $className): self
 	{
 		return new self("Cannot create object instance. Class '$className' not found. Please check your auto-loader and class name.");
 	}
@@ -170,6 +170,10 @@ final class ObjectStateBuilderException extends UsageException {
 		return new self("Only scalars can be used for field name. '$type' given.");
 	}
 
+	/**
+	 * @param int|string $name
+	 * @param mixed $value
+	 */
 	public static function fieldIsAlreadySet($name, $value): self
 	{
 		return new self("You have already set field '$name' to value '$value'.");
@@ -191,7 +195,7 @@ final class ObjectStateBuilderException extends UsageException {
 
 final class MapperException extends UsageException {
 
-	public static function fullyQualifiedNameCannotEndWithNamespaceSeparator($fullyQualifiedName): self
+	public static function fullyQualifiedNameCannotEndWithNamespaceSeparator(string $fullyQualifiedName): self
 	{
 		return new self("Fully qualified name cannot end with namespace separator. '$fullyQualifiedName' given");
 	}
@@ -281,7 +285,7 @@ final class PayloadProcessorException extends UsageException {
 		);
 	}
 
-	public static function missingNameMappingFor($className): self
+	public static function missingNameMappingFor(string $className): self
 	{
 		return new self("Missing name mapping from '$className' to transfer name. Did you forget to register it in mapper?");
 	}

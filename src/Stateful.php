@@ -25,10 +25,10 @@ interface Stateful
 	 * Use array access to receive object state
 	 *
 	 * @param State $state state of your object before serialization
-	 * @return self
+	 * @return static
 	 *
 	 * @internal this method should be used for deserialization purposes
 	 */
-	public static function _fromState(State $state): self;
+	public static function _fromState(State $state)/*: static todo when PHP ^8.0 */;
 
 }

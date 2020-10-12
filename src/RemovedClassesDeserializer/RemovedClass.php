@@ -22,6 +22,9 @@ final class RemovedClass
 		return new self(\iterator_to_array($state));
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function __get(string $name)
 	{
 		if (\array_key_exists($name, $this->data)) {
@@ -36,6 +39,9 @@ final class RemovedClass
 		return \array_key_exists($name, $this->data);
 	}
 
+	/**
+	 * @param mixed $value
+	 */
 	public function __set(string $name, $value): void
 	{
 		throw RemovedClassException::removedClassIsImmutable();

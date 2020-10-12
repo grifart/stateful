@@ -11,11 +11,7 @@ use Grifart\Stateful\Exceptions\ObjectStateBuilderException;
 final class StateBuilder
 {
 
-	/**
-	 * @param object $theInstance
-	 * @return StateBuilder
-	 */
-	public static function from($theInstance): self
+	public static function from(object $theInstance): self
 	{
 		assert(is_object($theInstance));
 
@@ -24,9 +20,8 @@ final class StateBuilder
 
 
 	/** @internal use ::from() instead */
-	private function __construct($instance)
+	private function __construct(object $instance)
 	{
-		assert(is_object($instance));
 		$this->instance = $instance;
 	}
 

@@ -19,19 +19,16 @@ use function Interop\EqualableUtils\equals;
  * This state container MUST NEVER be used outside original object that generated it.
  * (otherwise this will break encapsulation of source object)
  *
- * @implements \Iterator<string,mixed>
+ * @implements \ArrayAccess<string, mixed>
+ * @implements \Iterator<string, mixed>
  */
 final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 {
 
 	//<editor-fold desc="Named constructors">
 
-	public static function from($theInstance, int $version, array $state, array $ignore = []): self
+	public static function from(object $theInstance, int $version, array $state, array $ignore = []): self
 	{
-		if (!is_object($theInstance)) {
-			throw ObjectStateException::givenReferenceMustBeAnObject(gettype($theInstance));
-		}
-
 		if(Tools::areAssertsEvaluated()) {
 			self::assertAllPropertiesHaveBeenSerialized($theInstance, $state, $ignore);
 		}
@@ -47,7 +44,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 	 * - at container build time (?)
 	 */
 	private static function assertAllPropertiesHaveBeenSerialized(
-		$theInstance,
+		object $theInstance,
 		array $primitivesForSerialization,
 		array $ignore
 	): void {
@@ -71,16 +68,16 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 	}
 
 	/** @return \ReflectionProperty[] */
-	private static function getPropertiesForInstance($theInstance): array
+	private static function getPropertiesForInstance(object $theInstance): array
 	{
 		return (new \ReflectionClass($theInstance))->getProperties();
 	}
 
 	/** @return string[] names */
-	private static function getPropertyNamesForInstance($theClass): array
+	private static function getPropertyNamesForInstance(object $theInstance): array
 	{
 		$classPropertyNames = [];
-		foreach (self::getPropertiesForInstance($theClass) AS $property) {
+		foreach (self::getPropertiesForInstance($theInstance) AS $property) {
 			$classPropertyNames[] = $property->getName();
 		}
 		return $classPropertyNames;
@@ -179,6 +176,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 
 	//<editor-fold desc="Property access checks">
 
+	/** @var array<string, bool> */
 	private $accessedProperties = [];
 
 	/**
@@ -222,7 +220,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 
 
 	/** Mark property as used */
-	private function setUsed($propertyName): void
+	private function setUsed(string $propertyName): void
 	{
 		$this->accessedProperties[$propertyName] = true;
 	}
@@ -286,7 +284,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 	// Traversable interface:
 	// Proxy iterator manually to automatically setUsed for properties
 
-	/** @var \ArrayIterator */
+	/** @var \ArrayIterator<string, mixed> */
 	private $iterator;
 
 	public function current()
@@ -323,9 +321,13 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 
 	// OBJECT CONSTRUCTION HELPERS:
 
-	/** @var ?\ReflectionClass */
+	/** @var ?\ReflectionClass<object> */
 	private $_reflectionClass;
 
+
+	/**
+	 * @return \ReflectionClass<object>
+	 */
 	private function getReflectionClass(): \ReflectionClass
 	{
 		if ($this->_reflectionClass !== null) {
@@ -333,7 +335,9 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 		}
 
 		try {
-			$reflection = new \ReflectionClass($this->className);
+			/** @var class-string<object> $className */
+			$className = $this->className;
+			$reflection = new \ReflectionClass($className);
 
 		} catch (\ReflectionException $e) {
 			throw ObjectStateException::cannotCreateClass_classNotFound($this->getClassName());
@@ -347,7 +351,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 	 * @param string $class A class to be created
 	 * @return object
 	 */
-	public function makeAnEmptyObject(string $class)
+	public function makeAnEmptyObject(string $class): object
 	{
 		if($this->className !== $class) {
 			throw ObjectStateException::mustCreateSameObjectTypeAsWasOriginalObject($this->className, $class);
@@ -360,7 +364,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 	 * @param string $class A class to be created.
 	 * @return object
 	 */
-	public function makeObjectWithProperties(string $class)
+	public function makeObjectWithProperties(string $class): object
 	{
 		$object = $this->makeAnEmptyObject($class);
 
