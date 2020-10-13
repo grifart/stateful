@@ -14,7 +14,7 @@ class UsageException extends \LogicException {}
 // ----------- Runtime exceptions (are part of public API therefore changing them changes public API) ------------------
 
 	class VersionMismatchException extends RuntimeException {
-		public static function versionDoesNotMatch(State $state, array $supportedVersions = [])
+		public static function versionDoesNotMatch(State $state, array $supportedVersions = []): self
 		{
 			$className = $state->getClassName();
 			$providedVersion = $state->getVersion();
@@ -38,7 +38,7 @@ class UsageException extends \LogicException {}
 
 		final class ClassNameMappingException extends PayloadParserException {
 
-			public static function cannotConvertTransferNameToClassName($transferName): self
+			public static function cannotConvertTransferNameToClassName(string $transferName): self
 			{
 				return new self("Cannot convert transfer class name $transferName to fully qualified class name. Did you registered it into name mapper?");
 			}
@@ -47,7 +47,7 @@ class UsageException extends \LogicException {}
 
 		final class ClassNotFoundException extends PayloadParserException {
 
-			public static function classNameDeliverFromTransferName($className, $transferName): self
+			public static function classNameDeliverFromTransferName(string $className, string $transferName): self
 			{
 				return new self("Class '$className' has not been found in runtime. Class name was derived from $transferName.");
 			}
@@ -56,7 +56,7 @@ class UsageException extends \LogicException {}
 
 		final class NoAppropriateDeserializerFoundException extends PayloadParserException {
 
-			public static function for($className): self
+			public static function for(string $className): self
 			{
 				return new self(
 					  "Cannot reconstructFromState '$className', no deserializer found. "
@@ -67,7 +67,7 @@ class UsageException extends \LogicException {}
 			}
 
 
-			public static function unknownSerializationVersion()
+			public static function unknownSerializationVersion(): NoAppropriateDeserializerFoundException
 			{
 				return new self('Unknown version for deserialization.');
 			}
@@ -87,7 +87,7 @@ class UsageException extends \LogicException {}
 				return new self('Metadata field in payload is missing.');
 			}
 
-			public static function payloadRootMustBeAnArray($type): self
+			public static function payloadRootMustBeAnArray(string $type): self
 			{
 				return new self("Payload root must be an array. '$type' given.");
 			}
@@ -111,7 +111,7 @@ class UsageException extends \LogicException {}
 					return new self('You have not provided transfer class name in metadata.');
 				}
 
-				public static function metadataMustBeAnArray(string $type)
+				public static function metadataMustBeAnArray(string $type): MalformedMetadataException
 				{
 					return new self("Metadata must be an array. '$type' given");
 				}
@@ -147,7 +147,7 @@ final class ObjectStateException extends UsageException {
 		return new self("It is not allowed to modify object state. ('$class'; $offset");
 	}
 
-	public static function cannotCreateClass_classNotFound($className): self
+	public static function cannotCreateClass_classNotFound(string $className): self
 	{
 		return new self("Cannot create object instance. Class '$className' not found. Please check your auto-loader and class name.");
 	}
@@ -170,6 +170,10 @@ final class ObjectStateBuilderException extends UsageException {
 		return new self("Only scalars can be used for field name. '$type' given.");
 	}
 
+	/**
+	 * @param int|string $name
+	 * @param mixed $value
+	 */
 	public static function fieldIsAlreadySet($name, $value): self
 	{
 		return new self("You have already set field '$name' to value '$value'.");
@@ -191,7 +195,7 @@ final class ObjectStateBuilderException extends UsageException {
 
 final class MapperException extends UsageException {
 
-	public static function fullyQualifiedNameCannotEndWithNamespaceSeparator($fullyQualifiedName): self
+	public static function fullyQualifiedNameCannotEndWithNamespaceSeparator(string $fullyQualifiedName): self
 	{
 		return new self("Fully qualified name cannot end with namespace separator. '$fullyQualifiedName' given");
 	}
@@ -209,12 +213,12 @@ final class MapperException extends UsageException {
 
 final class ExternalSerializerException extends UsageException {
 
-	public static function serializerIsNotAValidFunction(\ReflectionException $previous)
+	public static function serializerIsNotAValidFunction(\ReflectionException $previous): ExternalSerializerException
 	{
 		return new self('Provided (de)serializer is not a valid function.', 0, $previous);
 	}
 
-	public static function givenFunctionIsNotAValidSerializer(\ReflectionFunction $fnR)
+	public static function givenFunctionIsNotAValidSerializer(\ReflectionFunction $fnR): ExternalSerializerException
 	{
 		return new self('Given function is not valid serializer / deserializer. See docs for how it should look like. '
 			. "["
@@ -256,9 +260,11 @@ final class PayloadException extends UsageException
 
 final class PayloadProcessorException extends UsageException {
 
-	public static function unexpectedObjectTypeInPayload(string $className): self
+	/** @param mixed $value */
+	public static function unexpectedInputType($value): self
 	{
-		return new self("Unexpected object type '$className' in payload. Did yoy registered external serializer for this type? Shouldn't this type implement Stateful interface?");
+		$typeName = gettype($value);
+		return new self("Unexpected type '$typeName' on input. It looks like you have leaked '$typeName' type into 'State' produced by your object. Stateful cannot serialize '$typeName' type. If you think it should, please open an issue.");
 	}
 
 	public static function objectIsNotSerializable_noSerializerFound(string $class): self
@@ -281,7 +287,7 @@ final class PayloadProcessorException extends UsageException {
 		);
 	}
 
-	public static function missingNameMappingFor($className): self
+	public static function missingNameMappingFor(string $className): self
 	{
 		return new self("Missing name mapping from '$className' to transfer name. Did you forget to register it in mapper?");
 	}
@@ -350,17 +356,17 @@ class ClosureExternalSerializerException extends UsageException {
 		return new self($fnR, 'Serializer accepts null values in parameters.');
 	}
 
-	public static function missingReturnType(\ReflectionFunction $fnR)
+	public static function missingReturnType(\ReflectionFunction $fnR): ClosureExternalSerializerException
 	{
 		return new self($fnR, 'Serializer does not have return type.');
 	}
 
-	public static function canReturnNull(\ReflectionFunction $fnR)
+	public static function canReturnNull(\ReflectionFunction $fnR): ClosureExternalSerializerException
 	{
 		return new self($fnR, 'Serializer cannot return null.');
 	}
 
-	public static function doesNotSpecifyReturnType(\ReflectionFunction $fnR)
+	public static function doesNotSpecifyReturnType(\ReflectionFunction $fnR): ClosureExternalSerializerException
 	{
 		return new self($fnR, 'Serializer cannot return null.');
 	}

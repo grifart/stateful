@@ -28,7 +28,8 @@ final class ClosureDeserializer
 		$this->forType = $forType;
 	}
 
-	public function isUsableFor(string $type) {
+	public function isUsableFor(string $type): bool
+	{
 		if($this->matchSubtypes === FALSE) {
 			return $type === $this->forType;
 		}
@@ -36,11 +37,7 @@ final class ClosureDeserializer
 		return is_a($type, $this->forType, TRUE);
 	}
 
-	/**
-	 * @param State $object
-	 * @return object
-	 */
-	public function reconstructFromState(State $object)
+	public function reconstructFromState(State $object): object
 	{
 		$createdObject = call_user_func($this->deserializer, $object);
 

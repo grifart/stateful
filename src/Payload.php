@@ -17,6 +17,10 @@ final class Payload implements \JsonSerializable//implements \JsonSerializable, 
 	/** @var mixed */
 	private $data;
 
+
+	/**
+	 * @param mixed $root
+	 */
 	public function __construct($root)
 	{
 		$this->data = $root;

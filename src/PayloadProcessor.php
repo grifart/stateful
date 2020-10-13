@@ -5,7 +5,6 @@ use Grifart\Stateful\Exceptions\ClassNameMappingException;
 use Grifart\Stateful\Exceptions\ClassNotFoundException;
 use Grifart\Stateful\Exceptions\MalformedMetadataException;
 use Grifart\Stateful\Exceptions\MalformedPayloadException;
-use Grifart\Stateful\Exceptions\NoAppropriateDeserializerFoundException;
 use Grifart\Stateful\Exceptions\PayloadProcessorException;
 use Grifart\Stateful\ExternalSerializer\Serializer;
 use Grifart\Stateful\Mapper\Mapper;
@@ -73,11 +72,15 @@ final class PayloadProcessor
 		return new Payload($primitivizedData);
 	}
 
+	/**
+	 * @param mixed $value
+	 * @return mixed
+	 */
 	private function _toPayload($value)
 	{
 		// every object must have been already replaced by State; if not error
 		// primitives and arrays are still in in original form
-		// goal: make then uniform and unserializable
+		// goal: make then uniform and deserializable
 
 		// scalars are always serializable
 		if (is_scalar($value)) {
@@ -100,21 +103,34 @@ final class PayloadProcessor
 		}
 
 		// Objects: extract state and construct payload
-		if (!is_object($value)) {
-			throw PayloadProcessorException::unexpectedObjectTypeInPayload(get_class($value));
+		if (\is_object($value)) {
+			return $this->primitivizeObjectState(
+				$this->extractObjectState($value)
+			);
 		}
 
-		return $this->primitivizeObjectState(
-			$this->extractObjectState($value)
-		);
+		// PHP TYPE CHECKLIST
+		// https://www.php.net/manual/en/language.types.php
+		//
+		// OK (Booleans, Integers, Floating point numbers, Strings)
+		// OK NULL
+		// OK Arrays
+		// OK Objects
+		//   OKish Iterables (objects only)
+		//   OKish Callbacks / Callables (objects only)
+		// Resources --> ERROR
+
+		// for future PHP compatibility, error branch is the default one.
+		// For PHP 7.4 this case covers:
+		//  - resources
+		//  - native iterables
+		//  - native closure
+		// These types are NOT serializable, thus will throw and exception.
+		throw PayloadProcessorException::unexpectedInputType($value);
 	}
 
 
-	/**
-	 * @param object $object
-	 * @return State
-	 */
-	private function extractObjectState($object): State
+	private function extractObjectState(object $object): State
 	{
 		assert(is_object($object));
 
@@ -208,7 +224,12 @@ final class PayloadProcessor
 		return $this->_fromPayload($primitives);
 	}
 
-	private function _fromPayload(/*scalar|null|array*/ $data)//: scalar|null|array|object
+
+	/**
+	 * @param mixed $data
+	 * @return mixed
+	 */
+	private function _fromPayload($data)
 	{
 		// SCALARS:
 		if (is_scalar($data)) {
@@ -244,7 +265,10 @@ final class PayloadProcessor
 	}
 
 
-	private function fromPayload_object(array $serializedObjectFields, PayloadMetadata $meta)//: object
+	/**
+	 * @return mixed Doesn't have to be object if deserialized via RemovedClassDeserializer
+	 */
+	private function fromPayload_object(array $serializedObjectFields, PayloadMetadata $meta)
 	{
 		$stateVersion = $meta->getVersion();
 
@@ -278,7 +302,6 @@ final class PayloadProcessor
 
 		// non-stateful objects --> use ad-hoc provided unserializers
 		if (($createdObject = $this->externalSerializer->reconstructFromState($objectState)) !== NULL) {
-			\assert($createdObject !== NULL); // phpstan workaround; handled one line above; https://github.com/phpstan/phpstan/issues/750
 			if(Tools::areAssertsEvaluated()) {
 				$this->assertCreatedObject($objectState, $createdObject);
 			}

@@ -78,10 +78,6 @@ final class SerializerList implements Serializer
 				continue;
 
 			}
-
-			throw new UsageException(
-				'Internal error: check closure returned different type then it should.'
-			);
 		}
 
 		return $list;
@@ -117,6 +113,7 @@ final class SerializerList implements Serializer
 		if ($paramTypeR->allowsNull()) {
 			throw ClosureExternalSerializerException::allowsNullToBeAnParameter($fnR);
 		}
+		/** @var class-string<mixed> $parameterType */
 		$parameterType = $paramTypeR->getName();
 
 		// RETURN TYPE:
@@ -132,6 +129,7 @@ final class SerializerList implements Serializer
 			throw ClosureExternalSerializerException::canReturnNull($fnR);
 		}
 		assert($returnTypeReflection instanceof \ReflectionNamedType);
+		/** @var class-string<mixed> $returnType */
 		$returnType = $returnTypeReflection->getName();
 
 		$isSerializer = $returnType === State::class;
@@ -163,7 +161,10 @@ final class SerializerList implements Serializer
 				);
 	}
 
-	/** @throw ExternalSerializerException */
+	/**
+	 * @param class-string<mixed> $typeToValidate
+	 * @throw ExternalSerializerException
+	 */
 	private static function checkInterfacesAndAbstractClasses(string $typeToValidate): void
 	{
 		$typeReflection = new \ReflectionClass($typeToValidate);

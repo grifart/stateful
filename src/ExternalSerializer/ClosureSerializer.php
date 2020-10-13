@@ -28,7 +28,8 @@ final class ClosureSerializer
 		$this->forType = $forType;
 	}
 
-	public function isUsableFor($objectInstance) {
+	public function isUsableFor(object $objectInstance): bool
+	{
 		if($this->matchSubtypes === FALSE) {
 			return get_class($objectInstance) === $this->forType;
 		}
@@ -37,11 +38,7 @@ final class ClosureSerializer
 		return $objectInstance instanceof $this->forType;
 	}
 
-	/**
-	 * @param object $object
-	 * @return State
-	 */
-	public function extractState($object): State
+	public function extractState(object $object): State
 	{
 		return call_user_func($this->deserializer, $object);
 	}
