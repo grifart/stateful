@@ -302,7 +302,6 @@ final class PayloadProcessor
 
 		// non-stateful objects --> use ad-hoc provided unserializers
 		if (($createdObject = $this->externalSerializer->reconstructFromState($objectState)) !== NULL) {
-			\assert($createdObject !== NULL); // phpstan workaround; handled one line above; https://github.com/phpstan/phpstan/issues/750
 			if(Tools::areAssertsEvaluated()) {
 				$this->assertCreatedObject($objectState, $createdObject);
 			}
