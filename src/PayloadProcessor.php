@@ -104,7 +104,7 @@ final class PayloadProcessor
 
 		// Objects: extract state and construct payload
 		if (\is_object($value)) {
-			$this->primitivizeObjectState(
+			return $this->primitivizeObjectState(
 				$this->extractObjectState($value)
 			);
 		}
