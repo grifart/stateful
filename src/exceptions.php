@@ -260,9 +260,11 @@ final class PayloadException extends UsageException
 
 final class PayloadProcessorException extends UsageException {
 
-	public static function unexpectedObjectTypeInPayload(string $className): self
+	/** @param mixed $value */
+	public static function unexpectedInputType($value): self
 	{
-		return new self("Unexpected object type '$className' in payload. Did yoy registered external serializer for this type? Shouldn't this type implement Stateful interface?");
+		$typeName = gettype($value);
+		return new self("Unexpected type '$typeName' on input. It looks like you have leaked '$typeName' type into 'State' produced by your object. Stateful cannot serialize '$typeName' type. If you think it should, please open an issue.");
 	}
 
 	public static function objectIsNotSerializable_noSerializerFound(string $class): self

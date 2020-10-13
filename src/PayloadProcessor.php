@@ -5,7 +5,6 @@ use Grifart\Stateful\Exceptions\ClassNameMappingException;
 use Grifart\Stateful\Exceptions\ClassNotFoundException;
 use Grifart\Stateful\Exceptions\MalformedMetadataException;
 use Grifart\Stateful\Exceptions\MalformedPayloadException;
-use Grifart\Stateful\Exceptions\NoAppropriateDeserializerFoundException;
 use Grifart\Stateful\Exceptions\PayloadProcessorException;
 use Grifart\Stateful\ExternalSerializer\Serializer;
 use Grifart\Stateful\Mapper\Mapper;
@@ -81,7 +80,7 @@ final class PayloadProcessor
 	{
 		// every object must have been already replaced by State; if not error
 		// primitives and arrays are still in in original form
-		// goal: make then uniform and unserializable
+		// goal: make then uniform and deserializable
 
 		// scalars are always serializable
 		if (is_scalar($value)) {
@@ -104,13 +103,30 @@ final class PayloadProcessor
 		}
 
 		// Objects: extract state and construct payload
-		if (!is_object($value)) {
-			throw PayloadProcessorException::unexpectedObjectTypeInPayload(get_class($value));
+		if (\is_object($value)) {
+			$this->primitivizeObjectState(
+				$this->extractObjectState($value)
+			);
 		}
 
-		return $this->primitivizeObjectState(
-			$this->extractObjectState($value)
-		);
+		// PHP TYPE CHECKLIST
+		// https://www.php.net/manual/en/language.types.php
+		//
+		// OK (Booleans, Integers, Floating point numbers, Strings)
+		// OK NULL
+		// OK Arrays
+		// OK Objects
+		//   OKish Iterables (objects only)
+		//   OKish Callbacks / Callables (objects only)
+		// Resources --> ERROR
+
+		// for future PHP compatibility, error branch is the default one.
+		// For PHP 7.4 this case covers:
+		//  - resources
+		//  - native iterables
+		//  - native closure
+		// These types are NOT serializable, thus will throw and exception.
+		throw PayloadProcessorException::unexpectedInputType($value);
 	}
 
 
