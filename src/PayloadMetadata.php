@@ -89,14 +89,11 @@ final class PayloadMetadata
 	{
 	}
 
-	/** @var string */
-	private $type;
+	private string $type;
 
-	/** @var string|null */
-	private $transferClassName;
+	private ?string $transferClassName = null;
 
-	/** @var int|null */
-	private $version;
+	private ?int $version = null;
 
 	private static function buildForArray(): self
 	{

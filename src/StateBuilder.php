@@ -26,23 +26,20 @@ final class StateBuilder
 	}
 
 
-	/** @var object */
-	private $instance;
+	private object $instance;
 
-	/** @var int */
-	private $version;
+	private int $version;
 
-	/** @var array */
-	private $state = [];
+	private array $state = [];
 
-	/** @var array */
-	private $ignore = [];
+	/** @var (int|string)[] */
+	private array $ignore = [];
 
 
 	/** Sets serialized state version */
 	public function version(int $version): self
 	{
-		if($this->version !== NULL) {
+		if (isset($this->version)) {
 			throw ObjectStateBuilderException::versionHasAlreadyBeenSet($this->version, $version);
 		}
 
@@ -53,17 +50,9 @@ final class StateBuilder
 
 	/**
 	 * Sets object state field from given value.
-	 *
-	 * @param int|string $name must be scalar value
-	 * @param mixed $value
-	 * @return self
 	 */
-	public function field($name, $value): self
+	public function field(int|string $name, mixed $value): self
 	{
-		if (!is_scalar($name)) {
-			throw ObjectStateBuilderException::onlyScalarsAreAllowedAsStateFiledNames(gettype($name));
-		}
-
 		if (array_key_exists($name, $this->state)) { // intentionally not used isset()
 			throw ObjectStateBuilderException::fieldIsAlreadySet($name, $value);
 		}
@@ -76,16 +65,9 @@ final class StateBuilder
 
 	/**
 	 * Ignores object field
-	 *
-	 * @param int|string $fieldName must be scalar value
-	 * @return self
 	 */
-	public function ignore($fieldName): self
+	public function ignore(int|string $fieldName): self
 	{
-		if (!is_scalar($fieldName)) {
-			throw ObjectStateBuilderException::onlyScalarsAreAllowedAsStateFiledNames(gettype($fieldName));
-		}
-
 		// todo: make this idempotent?
 		if (in_array($fieldName, $this->ignore, true)) {
 			throw ObjectStateBuilderException::fieldHasAlreadyBeenIgnored($fieldName);
@@ -99,7 +81,7 @@ final class StateBuilder
 
 	public function build(): State
 	{
-		if($this->version === NULL) {
+		if ( ! isset($this->version)) {
 			throw ObjectStateBuilderException::versionHasNotBeenProvided();
 		}
 

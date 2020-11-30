@@ -6,16 +6,12 @@ namespace Grifart\Stateful\Mapper;
 
 final class CompositeMapper implements Mapper
 {
-	/** @var Mapper[] */
-	private $mappers = [];
-
 	/**
 	 * @param Mapper[] $mappers
 	 */
-	private function __construct(array $mappers = [])
-	{
-		$this->mappers = $mappers;
-	}
+	private function __construct(
+		private array $mappers = []
+	) {}
 
 
 	public static function from(Mapper ...$mappers): self

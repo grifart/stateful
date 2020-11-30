@@ -12,21 +12,14 @@ use Grifart\Stateful\State;
 final class ClosureDeserializer
 {
 
-	/** @var callable */
-	private $deserializer;
-
-	/** @var bool */
-	private $matchSubtypes;
-
-	/** @var string */
-	private $forType;
-
-	public function __construct(callable $serializer, string $forType, bool $matchSubtypes)
-	{
-		$this->deserializer = $serializer;
-		$this->matchSubtypes = $matchSubtypes;
-		$this->forType = $forType;
-	}
+	/**
+	 * @param \Closure(State $state): object $deserializer
+	 */
+	public function __construct(
+		private \Closure $deserializer,
+		private string $forType,
+		private bool $matchSubtypes,
+	) {}
 
 	public function isUsableFor(string $type): bool
 	{
@@ -39,7 +32,7 @@ final class ClosureDeserializer
 
 	public function reconstructFromState(State $object): object
 	{
-		$createdObject = call_user_func($this->deserializer, $object);
+		$createdObject = ($this->deserializer)($object);
 
 		// guaranteed by closure return type
 		assert($createdObject instanceof $this->forType);

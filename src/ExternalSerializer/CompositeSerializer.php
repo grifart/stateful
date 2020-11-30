@@ -9,14 +9,10 @@ use Grifart\Stateful\State;
 final class CompositeSerializer implements Serializer
 {
 
-	/** @var Serializer[] */
-	private $serializers;
-
 	/** @param Serializer[] $serializers */
-	public function __construct(array $serializers)
-	{
-		$this->serializers = $serializers;
-	}
+	public function __construct(
+		private array $serializers,
+	) {}
 
 	public static function from(Serializer ...$serializers): self
 	{
@@ -26,7 +22,7 @@ final class CompositeSerializer implements Serializer
 	/**
 	 * @inheritDoc
 	 */
-	public function extractState($object): ?State
+	public function extractState(object $object): ?State
 	{
 		foreach ($this->serializers as $serializer) {
 			if (($state = $serializer->extractState($object)) !== NULL) {
@@ -39,7 +35,7 @@ final class CompositeSerializer implements Serializer
 	/**
 	 * @inheritDoc
 	 */
-	public function reconstructFromState(State $state)
+	public function reconstructFromState(State $state): ?object
 	{
 		foreach ($this->serializers as $serializer) {
 			if (($object = $serializer->reconstructFromState($state)) !== NULL) {

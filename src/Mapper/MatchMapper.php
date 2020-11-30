@@ -5,22 +5,10 @@ namespace Grifart\Stateful\Mapper;
 
 final class MatchMapper implements Mapper
 {
-	/**
-	 * @var string
-	 */
-	private $transferName;
-
-	/**
-	 * @var string
-	 */
-	private $localName;
-
-
-	public function __construct(string $localName, string $transferName)
-	{
-		$this->transferName = $transferName;
-		$this->localName = $localName;
-	}
+	public function __construct(
+		private string $localName,
+		private string $transferName,
+	) {}
 
 
 	public function toTransferName(string $fullyQualifiedName): ?string

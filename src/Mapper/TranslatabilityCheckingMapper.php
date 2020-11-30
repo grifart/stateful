@@ -14,30 +14,23 @@ namespace Grifart\Stateful\Mapper;
  *
  * Especially useful with {@see ReflexivityCheckingMapper}
  */
-final class TranslatabilityCheckingMapper implements Mapper {
+final class TranslatabilityCheckingMapper implements Mapper
+{
 
-	/** @var \Grifart\Stateful\Mapper\Mapper */
-	private $mapper1;
-
-	/** @var \Grifart\Stateful\Mapper\Mapper */
-	private $mapper2;
-
-
-	public function __construct(Mapper $mapper, Mapper $checkedMapper)
-	{
-		$this->mapper1 = $mapper;
-		$this->mapper2 = $checkedMapper;
-	}
+	public function __construct(
+		private Mapper $mapper,
+		private Mapper $checkedMapper,
+	) {}
 
 
 	public function toTransferName(string $fullyQualifiedName): ?string
 	{
-		$transferName1 = $this->mapper1->toTransferName($fullyQualifiedName);
+		$transferName1 = $this->mapper->toTransferName($fullyQualifiedName);
 
 		$fail = AssertionFailed::failFactory($fullyQualifiedName, $transferName1);
 
 		// if mapper1 knows -> mapper2 must also know
-		$transferName2 = $this->mapper2->toTransferName($fullyQualifiedName);
+		$transferName2 = $this->checkedMapper->toTransferName($fullyQualifiedName);
 		if ($transferName1 !== NULL && $transferName2 === NULL) {
 			$fail(
 				'Mapper consistency check failed (FQN --X--> transfer). ' .
@@ -51,7 +44,7 @@ final class TranslatabilityCheckingMapper implements Mapper {
 
 	public function toFullyQualifiedName(string $transferName): ?string
 	{
-		$FQN1 = $this->mapper1->toFullyQualifiedName($transferName);
+		$FQN1 = $this->mapper->toFullyQualifiedName($transferName);
 		if ($FQN1 === NULL) {
 			return NULL;
 		}
@@ -61,7 +54,7 @@ final class TranslatabilityCheckingMapper implements Mapper {
 		// because transfer name passed to premise mapper can differ from consequence mapper name
 		// we must do the following: (1=mapper1; 2=mapper2)
 		// transfer1 -> FQN1 -> transfer2 -> FQN2
-		$transferName2 = $this->mapper2->toTransferName($FQN1);
+		$transferName2 = $this->checkedMapper->toTransferName($FQN1);
 		if ($transferName2 === NULL) {
 			$fail(
 				'Mapper consistency check failed (transfer1->FQN1 --X--> transfer2->FQN2). ' .
@@ -70,7 +63,7 @@ final class TranslatabilityCheckingMapper implements Mapper {
 		}
 
 		\assert($transferName2 !== NULL);
-		$FQN2 = $this->mapper2->toFullyQualifiedName($transferName2);
+		$FQN2 = $this->checkedMapper->toFullyQualifiedName($transferName2);
 		if ($FQN2 === NULL) {
 			$fail(
 				'Mapper consistency check failed (transfer1->FQN1->transfer2 --X--> FQN2). ' .

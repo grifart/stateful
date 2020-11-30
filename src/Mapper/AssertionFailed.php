@@ -6,17 +6,15 @@ use Throwable;
 
 final class AssertionFailed extends \AssertionError
 {
-	/** @var string */
-	private $input;
+	private string $input;
 
-	/** @var ?string */
-	private $output;
+	private ?string $output;
 
 
 	/** @internal use {@see failFactory} instead */
 	public function __construct(string $message, string $input, ?string $output)
 	{
-		parent::__construct($message, 0, NULL);
+		parent::__construct($message);
 		$this->input = $input;
 		$this->output = $output;
 	}

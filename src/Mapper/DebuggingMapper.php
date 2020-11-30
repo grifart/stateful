@@ -9,14 +9,12 @@ namespace Grifart\Stateful\Mapper;
  */
 final class DebuggingMapper implements Mapper {
 
-	/** @var Mapper */
-	private $inner;
+	private Mapper $inner;
 
 	/** @var array<string, string> */
-	private $translatedNames = [];
+	private array $translatedNames = [];
 
-	/** @var bool */
-	private $printOnDestruct;
+	private bool $printOnDestruct;
 
 	public function __construct(Mapper $inner, bool $printOnDestruct = false)
 	{

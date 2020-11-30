@@ -9,23 +9,16 @@ use Grifart\Stateful\State;
 
 final class RemovedClass
 {
-	/** @var array */
-	private $data;
-
-	private function __construct(array $data)
-	{
-		$this->data = $data;
-	}
+	private function __construct(
+		private array $data,
+	) {}
 
 	public static function fromState(State $state): self
 	{
 		return new self(\iterator_to_array($state));
 	}
 
-	/**
-	 * @return mixed
-	 */
-	public function __get(string $name)
+	public function __get(string $name): mixed
 	{
 		if (\array_key_exists($name, $this->data)) {
 			return $this->data[$name];
@@ -39,10 +32,7 @@ final class RemovedClass
 		return \array_key_exists($name, $this->data);
 	}
 
-	/**
-	 * @param mixed $value
-	 */
-	public function __set(string $name, $value): void
+	public function __set(string $name, mixed $value): void
 	{
 		throw RemovedClassException::removedClassIsImmutable();
 	}

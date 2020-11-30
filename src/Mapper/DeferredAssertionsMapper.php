@@ -11,11 +11,10 @@ namespace Grifart\Stateful\Mapper;
  */
 final class DeferredAssertionsMapper implements Mapper {
 
-	/** @var \Grifart\Stateful\Mapper\Mapper */
-	private $mapper;
+	private Mapper $mapper;
 
-	/** @var \Grifart\Stateful\Mapper\AssertionFailed[] */
-	private $failedAssertions = [];
+	/** @var AssertionFailed[] */
+	private array $failedAssertions = [];
 
 	public function __construct(Mapper $mapper)
 	{
@@ -46,7 +45,7 @@ final class DeferredAssertionsMapper implements Mapper {
 
 
 	/**
-	 * @return \Grifart\Stateful\Mapper\AssertionFailed[]
+	 * @return AssertionFailed[]
 	 */
 	public function getFailedAssertions(): array
 	{

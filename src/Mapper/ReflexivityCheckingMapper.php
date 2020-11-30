@@ -15,13 +15,9 @@ namespace Grifart\Stateful\Mapper;
  */
 final class ReflexivityCheckingMapper implements Mapper {
 
-	/** @var \Grifart\Stateful\Mapper\Mapper */
-	private $mapper;
-
-	public function __construct(Mapper $mapper)
-	{
-		$this->mapper = $mapper;
-	}
+	public function __construct(
+		private Mapper $mapper,
+	) {}
 
 
 	public function toTransferName(string $fullyQualifiedName): ?string

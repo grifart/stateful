@@ -20,14 +20,11 @@ final class PayloadProcessor
 
 	private const META_FIELD_SERIALIZATION_VERSION = 'serializationVersion';
 
-	/** @var Mapper */
-	private $mapper;
+	private Mapper $mapper;
 
-	/** @var Serializer */
-	private $externalSerializer;
+	private Serializer $externalSerializer;
 
-	/** @var RemovedClassesDeserializer */
-	private $removedClassesDeserializer;
+	private RemovedClassesDeserializer $removedClassesDeserializer;
 
 	/**
 	 * PayloadProcessor constructor.
@@ -52,16 +49,10 @@ final class PayloadProcessor
 	 * Converts given object into primitive structure composed of scalars and arrays.
 	 * Result will be also normalized. This simplifies comparisons of results.
 	 *
-	 * @param object|array|mixed $value
-	 *
 	 * @return \Grifart\Stateful\Payload Original data in serializable form
 	 */
-	public function toPayload($value): Payload
+	public function toPayload(object|array $value): Payload
 	{
-		if(!is_object($value) && !\is_array($value)) {
-			throw PayloadProcessorException::onlyObjectsAndArraysCanBeConvertedToPayload(gettype($value));
-		}
-
 		$primitivizedData = $this->_toPayload($value);
 
 		// set serialized version
@@ -72,11 +63,7 @@ final class PayloadProcessor
 		return new Payload($primitivizedData);
 	}
 
-	/**
-	 * @param mixed $value
-	 * @return mixed
-	 */
-	private function _toPayload($value)
+	private function _toPayload(mixed $value): mixed
 	{
 		// every object must have been already replaced by State; if not error
 		// primitives and arrays are still in in original form
@@ -194,7 +181,7 @@ final class PayloadProcessor
 	 * Use general {@see \Grifart\Stateful\Exceptions\PayloadParserException} to catch them all!
 	 *
 	 * @param \Grifart\Stateful\Payload $payload
-	 * @return object|array
+	 * @return object|array|mixed
 	 *
 	 * @throws \Grifart\Stateful\Exceptions\ClassNameMappingException Cannot covert transfer class name to real runtime class name.
 	 * @throws \Grifart\Stateful\Exceptions\ClassNotFoundException Cannot find class name in runtime.
@@ -202,7 +189,7 @@ final class PayloadProcessor
 	 * @throws \Grifart\Stateful\Exceptions\MalformedPayloadException If payload is corrupt
 	 * @throws \Grifart\Stateful\Exceptions\NoAppropriateDeserializerFoundException If no deserializer for object type is found.
 	 */
-	public function fromPayload(Payload $payload)
+	public function fromPayload(Payload $payload): mixed
 	{
 		$primitives = $payload->getPrimitives();
 
@@ -225,11 +212,7 @@ final class PayloadProcessor
 	}
 
 
-	/**
-	 * @param mixed $data
-	 * @return mixed
-	 */
-	private function _fromPayload($data)
+	private function _fromPayload(mixed $data): mixed
 	{
 		// SCALARS:
 		if (is_scalar($data)) {
@@ -268,7 +251,7 @@ final class PayloadProcessor
 	/**
 	 * @return mixed Doesn't have to be object if deserialized via RemovedClassDeserializer
 	 */
-	private function fromPayload_object(array $serializedObjectFields, PayloadMetadata $meta)
+	private function fromPayload_object(array $serializedObjectFields, PayloadMetadata $meta): mixed
 	{
 		$stateVersion = $meta->getVersion();
 
@@ -320,11 +303,7 @@ final class PayloadProcessor
 		return $data[self::META_FIELD];
 	}
 
-	/**
-	 * @param State  $objectState
-	 * @param object $createdObject
-	 */
-	private function assertCreatedObject(State $objectState, $createdObject): void
+	private function assertCreatedObject(State $objectState, object $createdObject): void
 	{
 		$originalClassType = $objectState->getClassName();
 		$createdClassType = get_class($createdObject);

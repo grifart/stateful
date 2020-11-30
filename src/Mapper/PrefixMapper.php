@@ -8,20 +8,13 @@ namespace Grifart\Stateful\Mapper;
 final class PrefixMapper implements Mapper
 {
 
-	/** @var Mapper[] */
-	private $mappers = [];
-
-	/** @var string */
-	private $prefix;
-
 	/**
 	 * @param Mapper[] $mappers
 	 */
-	public function __construct(string $prefix, array $mappers = [])
-	{
-		$this->prefix = $prefix;
-		$this->mappers = $mappers;
-	}
+	public function __construct(
+		private string $prefix,
+		private array $mappers = [],
+	) {}
 
 
 	public static function from(string $prefix, Mapper ...$mappers): self

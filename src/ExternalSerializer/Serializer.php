@@ -21,7 +21,7 @@ interface Serializer
 	 * @param object $object
 	 * @return \Grifart\Stateful\State|null
 	 */
-	public function extractState($object): ?State;
+	public function extractState(object $object): ?State;
 
 
 	/**
@@ -30,5 +30,5 @@ interface Serializer
 	 * @param State $state
 	 * @return object|null null means cannot deserialize; try to use another one
 	 */
-	public function reconstructFromState(State $state);
+	public function reconstructFromState(State $state): ?object;
 }

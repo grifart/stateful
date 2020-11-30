@@ -22,12 +22,12 @@ final class NullSerializer implements Serializer
 		return ($instance = new self());
 	}
 
-	public function extractState($object): ?State
+	public function extractState(object $object): ?State
 	{
 		return NULL;
 	}
 
-	public function reconstructFromState(State $state)
+	public function reconstructFromState(State $state): ?object
 	{
 		return NULL;
 	}

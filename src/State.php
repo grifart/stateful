@@ -86,17 +86,13 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 
 
 
-	/** @var array */
-	private $state;
+	private array $state;
 
-	/** @var string FQ class name */
-	private $className;
+	private string $className;
 
-	/** @var int */
-	private $version;
+	private int $version;
 
-	/** @var bool */
-	private $wasVersionRetrieved = FALSE;
+	private bool $wasVersionRetrieved = FALSE;
 
 	/** @internal */
 	public function __construct(string $className, int $version, array $state)
@@ -177,7 +173,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 	//<editor-fold desc="Property access checks">
 
 	/** @var array<string, bool> */
-	private $accessedProperties = [];
+	private array $accessedProperties = [];
 
 	/**
 	 * Resets which properties has been accessed
@@ -251,7 +247,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 	}
 
 
-	public function offsetGet($offset)
+	public function offsetGet($offset): mixed
 	{
 		if(!array_key_exists($offset, $this->state)) { // intentionally not isset() which returns FALSE for NULL values
 			throw ObjectStateException::accessedStatePropertyThatDoesNotExists((string) $offset, $this->getClassName());
@@ -285,7 +281,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 	// Proxy iterator manually to automatically setUsed for properties
 
 	/** @var \ArrayIterator<string, mixed> */
-	private $iterator;
+	private \ArrayIterator $iterator;
 
 	public function current()
 	{
@@ -322,7 +318,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 	// OBJECT CONSTRUCTION HELPERS:
 
 	/** @var ?\ReflectionClass<object> */
-	private $_reflectionClass;
+	private ?\ReflectionClass $_reflectionClass = null;
 
 
 	/**
@@ -386,7 +382,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 	}
 
 
-	public function equals($other): bool
+	public function equals(mixed $other): bool
 	{
 		if (!$other instanceof self) {
 			return false;

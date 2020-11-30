@@ -18,7 +18,7 @@ class TestClass implements Stateful
 		return State::from($this, 1, []);
 	}
 
-	public static function _fromState(State $state): Stateful
+	public static function _fromState(State $state): static
 	{
 		$state->ensureVersion(1);
 		$self = $state->makeAnEmptyObject(self::class);
