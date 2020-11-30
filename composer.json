@@ -14,7 +14,7 @@
 	},
 
 	"require": {
-		"php": "^7.2",
+		"php": "^7.2||^8.0",
 		"php-ds/php-ds": "^1.1",
 		"grifart/comparable-polyfill": "^1.0",
 		"grifart/equalable-utils": "^1.0"
