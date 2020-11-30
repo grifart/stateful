@@ -14,7 +14,7 @@
 	},
 
 	"require": {
-		"php": "^7.2||^8.0",
+		"php": "^8.0",
 		"php-ds/php-ds": "^1.1",
 		"grifart/comparable-polyfill": "^1.0",
 		"grifart/equalable-utils": "^1.0"
@@ -24,7 +24,7 @@
 		"mockery/mockery": "^1.0.0",
 		"phpstan/phpstan": "^0.12",
 		"php-parallel-lint/php-parallel-lint": "^1.0",
-		"php-parallel-lint/php-console-highlighter": "^0.4.0",
+		"php-parallel-lint/php-console-color": "^1.0",
 		"brick/date-time": "^0.2.1"
 	},
 	"autoload": {
