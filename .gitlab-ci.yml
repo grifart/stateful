@@ -1,5 +1,5 @@
 default:
-  image: grifart/php7.4-with-gulp-and-all-php-modules
+  image: grifart/php8.0-with-all-modules-and-various-tools
 
 stages:
   - build
@@ -8,35 +8,25 @@ stages:
 
 build.composer:
   stage: build
-
-  script:
-    - composer install --ansi --no-interaction --prefer-dist
-
+  script: composer install --ansi --no-interaction --prefer-dist
   artifacts:
     expire_in: 2 days
     paths:
       - vendor
 
-
 test.tests:
   stage: test
-
   dependencies: [build.composer]
-  script:
-    - composer run tester
+  script: composer run tester
 
 
 test.phpstan:
   stage: test
-
   dependencies: [build.composer]
-  script:
-    - composer run phpstan
+  script: composer run phpstan
 
 
 test.linter:
   stage: test
-
   dependencies: [build.composer]
-  script:
-    - composer run syntax-check
+  script: composer run syntax-check
