@@ -19,10 +19,10 @@ final class SerializerList implements Serializer
 {
 
 	/** @var ClosureSerializer[] */
-	private $serializers = [];
+	private array $serializers = [];
 
 	/** @var ClosureDeserializer[] */
-	private $deserializers = [];
+	private array $deserializers = [];
 
 
 	/**
@@ -195,7 +195,7 @@ final class SerializerList implements Serializer
 	}
 
 
-	public function extractState($object): ?State
+	public function extractState(object $object): ?State
 	{
 		foreach($this->serializers as $serializer) {
 			if(!$serializer->isUsableFor($object)) {
@@ -208,7 +208,7 @@ final class SerializerList implements Serializer
 	}
 
 
-	public function reconstructFromState(State $state)
+	public function reconstructFromState(State $state): ?object
 	{
 		foreach($this->deserializers as  $deserializer) {
 			if(!$deserializer->isUsableFor($state->getClassName())) {

@@ -45,7 +45,7 @@ trait SimpleStatefulTrait// implements Stateful
 
 
 	/** @internal used only for deserialization */
-	public static function _fromState(State $state): self
+	public static function _fromState(State $state): static
 	{
 		$reflection = new \ReflectionClass(static::class);
 

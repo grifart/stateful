@@ -8,21 +8,13 @@ use Grifart\Stateful\Exceptions\MapperException;
 final class SingleNamespaceMapper implements Mapper
 {
 
-	/** @var string */
-	private $transferPrefix;
-
-	/** @var string */
-	private $phpNamespaceSeparator = '\\';
-
-	/** @var string */
-	private $namespaceForMapping;
+	private const NAMESPACE_SEPARATOR = '\\';
 
 
-	public function __construct(string $namespaceForMapping, string $transferPrefix)
-	{
-		$this->transferPrefix = $transferPrefix;
-		$this->namespaceForMapping = $namespaceForMapping;
-	}
+	public function __construct(
+		private string $namespaceForMapping,
+		private string $transferPrefix,
+	) {}
 
 
 	/**
@@ -66,7 +58,7 @@ final class SingleNamespaceMapper implements Mapper
 		$rest = substr($transferName, strlen($this->transferPrefix));
 		// regexp is from: http://php.net/manual/en/language.oop5.basic.php
 		$classNameValid = \preg_match('#^[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*$#', $rest) === 1;
-		$fqn = $this->namespaceForMapping . $this->phpNamespaceSeparator . $rest;
+		$fqn = $this->namespaceForMapping . self::NAMESPACE_SEPARATOR . $rest;
 
 		return $classNameValid ? $fqn : null;
 	}

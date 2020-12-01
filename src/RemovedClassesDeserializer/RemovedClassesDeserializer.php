@@ -13,7 +13,7 @@ use Grifart\Stateful\Stateful;
 final class RemovedClassesDeserializer
 {
 	/** @var array<string, \Closure(State $state): mixed> */
-	private $deserializers = [];
+	private array $deserializers = [];
 
 	/**
 	 * @param array<string, \Closure(State $state): mixed> $deserializers
@@ -56,10 +56,7 @@ final class RemovedClassesDeserializer
 		return \array_key_exists($className, $this->deserializers);
 	}
 
-	/**
-	 * @return mixed
-	 */
-	public function deserialize(State $state)
+	public function deserialize(State $state): mixed
 	{
 		$className = $state->getClassName();
 		if ( ! isset($this->deserializers[$className])) {

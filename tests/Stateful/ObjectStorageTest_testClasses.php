@@ -268,7 +268,7 @@ namespace Grifart\Collection {
 		}
 
 
-		public static function _fromState(State $state)
+		public static function _fromState(State $state): static
 		{
 			$self = new static;
 

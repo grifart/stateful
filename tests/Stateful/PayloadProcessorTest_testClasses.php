@@ -14,7 +14,7 @@ final class EmptyClass implements Stateful {
 	}
 
 
-	public static function _fromState(State $state)
+	public static function _fromState(State $state): static
 	{
 		return new self($state);
 	}
@@ -37,7 +37,7 @@ final class SimpleObjectWithPrimitiveProperties implements Stateful {
 			->build();
 	}
 
-	public static function _fromState(State $state): self
+	public static function _fromState(State $state): static
 	{
 		assert($state->getVersion() === self::STATE_VERSION_0);
 
@@ -87,7 +87,7 @@ final class ComplexObjectWithReferenceToOtherObject implements Stateful {
 	}
 
 
-	public static function _fromState(State $state)
+	public static function _fromState(State $state): static
 	{
 		assert($state->getVersion() === 1);
 
@@ -123,7 +123,7 @@ final class ObjectWithUnserializableDateTimeImmutable implements Stateful {
 			->build();
 	}
 
-	public static function _fromState(State $state): self
+	public static function _fromState(State $state): static
 	{
 		assert( $state->getVersion() === 1 );
 
@@ -157,7 +157,7 @@ final class ObjectWithAnArrayOfPrimitives implements Stateful{
 			->build();
 	}
 
-	public static function _fromState(State $state)
+	public static function _fromState(State $state): static
 	{
 		assert($state->getVersion() === 1);
 
@@ -188,7 +188,7 @@ final class ObjectWithAnArrayOfObjects implements Stateful {
 			->build();
 	}
 
-	public static function _fromState(State $state)
+	public static function _fromState(State $state): static
 	{
 		assert($state->getVersion() === 1);
 

@@ -8,25 +8,13 @@ use Grifart\Stateful\Exceptions\MapperException;
 final class SimpleMapper implements Mapper
 {
 
-	/** @var string */
-	private $transferNamespaceSeparator;
+	private const NAMESPACE_SEPARATOR = '\\';
 
-	/** @var string */
-	private $transferPrefix;
-
-	/** @var string */
-	private $namespaceSeparator = '\\';
-
-	/** @var string */
-	private $namespacePrefix;
-
-
-	public function __construct(string $namespacePrefix, string $transferPrefix, string $transferNamespaceSeparator)
-	{
-		$this->transferNamespaceSeparator = $transferNamespaceSeparator;
-		$this->transferPrefix = $transferPrefix;
-		$this->namespacePrefix = $namespacePrefix;
-	}
+	public function __construct(
+		private string $namespacePrefix,
+		private string $transferPrefix,
+		private string $transferNamespaceSeparator
+	) {}
 
 
 	/**
@@ -37,27 +25,23 @@ final class SimpleMapper implements Mapper
 	 */
 	public function toTransferName(string $fullyQualifiedName): ?string
 	{
-		if (strlen($this->namespaceSeparator) !== 1) {
-			throw MapperException::namespaceSeparatorMustHaveOneCharacterOnly();
-		}
-
-		if(!$this->startsWith($fullyQualifiedName, $this->namespacePrefix . $this->namespaceSeparator)) {
+		if(!$this->startsWith($fullyQualifiedName, $this->namespacePrefix . self::NAMESPACE_SEPARATOR)) {
 			return NULL;
 		}
 
-		if( $fullyQualifiedName[strlen($fullyQualifiedName) - 1] === $this->namespaceSeparator) {
+		if( $fullyQualifiedName[strlen($fullyQualifiedName) - 1] === self::NAMESPACE_SEPARATOR) {
 			throw MapperException::fullyQualifiedNameCannotEndWithNamespaceSeparator($fullyQualifiedName);
 		}
 
 		$rest = substr($fullyQualifiedName, strlen($this->namespacePrefix));
-		$rest = ltrim($rest, $this->namespaceSeparator);
+		$rest = ltrim($rest, self::NAMESPACE_SEPARATOR);
 
 		if(empty($rest)) {
 			return NULL;
 		}
 
 
-		return $this->transferPrefix . str_replace($this->namespaceSeparator, $this->transferNamespaceSeparator, $rest);
+		return $this->transferPrefix . str_replace(self::NAMESPACE_SEPARATOR, $this->transferNamespaceSeparator, $rest);
 	}
 
 
@@ -75,7 +59,7 @@ final class SimpleMapper implements Mapper
 
 		$rest = substr($transferName, strlen($this->transferPrefix));
 
-		return $this->namespacePrefix . $this->namespaceSeparator . str_replace($this->transferNamespaceSeparator, $this->namespaceSeparator, $rest);
+		return $this->namespacePrefix . self::NAMESPACE_SEPARATOR . str_replace($this->transferNamespaceSeparator, self::NAMESPACE_SEPARATOR, $rest);
 	}
 
 
