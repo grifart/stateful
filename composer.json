@@ -31,7 +31,7 @@
 		"psr-4": {
 			"Grifart\\Stateful\\": "src/"
 		},
-		"files": ["src/exceptions.php"]
+		"classmap": ["src/exceptions.php"]
 	},
 	"autoload-dev": {
 		"psr-4": {
