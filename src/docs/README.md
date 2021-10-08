@@ -120,7 +120,7 @@ Note: External serializers are called ony when object does not implement *Statef
 
 ````php
 <?php
-use Grifart\Stateful\Exceptions\VersionMismatchException;use Grifart\Stateful\ExternalSerializer\SerializerList;use Grifart\Stateful\State; use Grifart\Stateful\StateBuilder;use Grifart\Stateful\PayloadProcessor; use Grifart\Stateful\Mapper\TrivialMapper;
+use Grifart\Stateful\VersionMismatchException;use Grifart\Stateful\ExternalSerializer\SerializerList;use Grifart\Stateful\State; use Grifart\Stateful\StateBuilder;use Grifart\Stateful\PayloadProcessor; use Grifart\Stateful\Mapper\TrivialMapper;
 
 $processor = new PayloadProcessor(
     new TrivialMapper(),
@@ -168,7 +168,7 @@ It is recommended to use this template:
 
 ````php
 <?php
-use Grifart\Stateful\Exceptions\VersionMismatchException;use Grifart\Stateful\Stateful; use Grifart\Stateful\State;use Grifart\Stateful\StateBuilder;
+use Grifart\Stateful\VersionMismatchException;use Grifart\Stateful\Stateful; use Grifart\Stateful\State;use Grifart\Stateful\StateBuilder;
 
 final class SomeClass implements Stateful {
 

@@ -6,7 +6,7 @@
 
 namespace Grifart\Stateful;
 
-use Grifart\Stateful\Exceptions\ObjectStateBuilderException;
+use Grifart\Stateful\ObjectStateBuilderException;
 
 final class StateBuilder
 {

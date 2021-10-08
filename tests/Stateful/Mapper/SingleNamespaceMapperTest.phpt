@@ -2,7 +2,7 @@
 
 namespace Grifart\TaxLibrary\Resolve\Infrastructure\Payload\Mapper;
 
-use Grifart\Stateful\Exceptions\MapperException;
+use Grifart\Stateful\MapperException;
 use Grifart\Stateful\Mapper\SimpleMapper;
 use Grifart\Stateful\Mapper\SingleNamespaceMapper;
 use Tester\Assert;

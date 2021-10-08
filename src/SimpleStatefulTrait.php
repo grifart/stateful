@@ -2,7 +2,7 @@
 
 namespace Grifart\Stateful;
 
-use Grifart\Stateful\Exceptions\VersionMismatchException;
+use Grifart\Stateful\VersionMismatchException;
 
 
 trait SimpleStatefulTrait// implements Stateful

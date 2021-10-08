@@ -3,7 +3,7 @@
 namespace Grifart\Stateful\Mapper;
 
 
-use Grifart\Stateful\Exceptions\MapperException;
+use Grifart\Stateful\MapperException;
 
 final class SingleNamespaceMapper implements Mapper
 {

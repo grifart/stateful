@@ -5,7 +5,7 @@
 
 namespace Grifart\Stateful;
 
-use Grifart\Stateful\Exceptions\MalformedPayloadException;
+use Grifart\Stateful\MalformedPayloadException;
 use Grifart\Stateful\ExternalSerializer\SerializerList;
 use Grifart\Stateful\Mapper\TrivialMapper;
 use Grifart\Stateful\RemovedClassesDeserializer\RemovedClass;
