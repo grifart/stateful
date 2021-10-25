@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
 namespace Grifart\Stateful;
-use Grifart\Stateful\Exceptions\ClassNameMappingException;
-use Grifart\Stateful\Exceptions\ClassNotFoundException;
-use Grifart\Stateful\Exceptions\MalformedMetadataException;
-use Grifart\Stateful\Exceptions\MalformedPayloadException;
-use Grifart\Stateful\Exceptions\PayloadProcessorException;
+use Grifart\Stateful\ClassNameMappingException;
+use Grifart\Stateful\ClassNotFoundException;
+use Grifart\Stateful\MalformedMetadataException;
+use Grifart\Stateful\MalformedPayloadException;
+use Grifart\Stateful\PayloadProcessorException;
 use Grifart\Stateful\ExternalSerializer\Serializer;
 use Grifart\Stateful\Mapper\Mapper;
 use Grifart\Stateful\RemovedClassesDeserializer\RemovedClassesDeserializer;
@@ -178,16 +178,16 @@ final class PayloadProcessor
 	/**
 	 * Convert payload back to object
 	 *
-	 * Use general {@see \Grifart\Stateful\Exceptions\PayloadParserException} to catch them all!
+	 * Use general {@see \Grifart\Stateful\PayloadParserException} to catch them all!
 	 *
 	 * @param \Grifart\Stateful\Payload $payload
 	 * @return object|array|mixed
 	 *
-	 * @throws \Grifart\Stateful\Exceptions\ClassNameMappingException Cannot covert transfer class name to real runtime class name.
-	 * @throws \Grifart\Stateful\Exceptions\ClassNotFoundException Cannot find class name in runtime.
-	 * @throws \Grifart\Stateful\Exceptions\MalformedMetadataException If metadata are corrupt.
-	 * @throws \Grifart\Stateful\Exceptions\MalformedPayloadException If payload is corrupt
-	 * @throws \Grifart\Stateful\Exceptions\NoAppropriateDeserializerFoundException If no deserializer for object type is found.
+	 * @throws \Grifart\Stateful\ClassNameMappingException Cannot covert transfer class name to real runtime class name.
+	 * @throws \Grifart\Stateful\ClassNotFoundException Cannot find class name in runtime.
+	 * @throws \Grifart\Stateful\MalformedMetadataException If metadata are corrupt.
+	 * @throws \Grifart\Stateful\MalformedPayloadException If payload is corrupt
+	 * @throws \Grifart\Stateful\NoAppropriateDeserializerFoundException If no deserializer for object type is found.
 	 */
 	public function fromPayload(Payload $payload): mixed
 	{

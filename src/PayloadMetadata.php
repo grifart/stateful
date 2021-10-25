@@ -5,7 +5,7 @@
  */
 
 namespace Grifart\Stateful;
-use Grifart\Stateful\Exceptions\MalformedMetadataException;
+use Grifart\Stateful\MalformedMetadataException;
 
 /** @internal used by {@see PayloadProcessor} */
 final class PayloadMetadata
@@ -51,7 +51,7 @@ final class PayloadMetadata
 	/**
 	 * @param array $metaArray
 	 * @return \Grifart\Stateful\PayloadMetadata
-	 * @throws \Grifart\Stateful\Exceptions\MalformedMetadataException if given metadata are not valid
+	 * @throws \Grifart\Stateful\MalformedMetadataException if given metadata are not valid
 	 */
 	public static function parse($metaArray): self
 	{

@@ -2,7 +2,7 @@
 
 namespace Grifart\Collection {
 
-	use Grifart\Stateful\Exceptions\NoAppropriateDeserializerFoundException;
+	use Grifart\Stateful\NoAppropriateDeserializerFoundException;
 	use Grifart\Stateful\State;
 	use Grifart\Stateful\StateBuilder;
 	use Grifart\Stateful\Stateful;

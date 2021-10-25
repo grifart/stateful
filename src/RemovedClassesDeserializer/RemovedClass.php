@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Grifart\Stateful\RemovedClassesDeserializer;
 
-use Grifart\Stateful\Exceptions\RemovedClassException;
+use Grifart\Stateful\RemovedClassException;
 use Grifart\Stateful\State;
 
 final class RemovedClass

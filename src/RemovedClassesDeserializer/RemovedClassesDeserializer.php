@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Grifart\Stateful\RemovedClassesDeserializer;
 
-use Grifart\Stateful\Exceptions\NoAppropriateDeserializerFoundException;
-use Grifart\Stateful\Exceptions\RemovedClassesDeserializerException;
+use Grifart\Stateful\NoAppropriateDeserializerFoundException;
+use Grifart\Stateful\RemovedClassesDeserializerException;
 use Grifart\Stateful\State;
 use Grifart\Stateful\Stateful;
 

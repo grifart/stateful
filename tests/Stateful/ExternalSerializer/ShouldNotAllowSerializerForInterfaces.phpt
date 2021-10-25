@@ -4,7 +4,7 @@ namespace Grifart\Stateful\ExternalSerializer\__tests;
 
 require __DIR__ . '/../../bootstrap.php';
 
-use Grifart\Stateful\Exceptions\ExternalSerializerException;
+use Grifart\Stateful\ExternalSerializerException;
 use Grifart\Stateful\ExternalSerializer\SerializerList;
 use Grifart\Stateful\State;
 use Tester\Assert;

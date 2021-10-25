@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Grifart\Stateful\Exceptions;
+namespace Grifart\Stateful;
 
 use Grifart\Stateful\PayloadProcessor;
 use Grifart\Stateful\State;

@@ -6,9 +6,9 @@
 
 namespace Grifart\Stateful\ExternalSerializer;
 
-use Grifart\Stateful\Exceptions\ClosureExternalSerializerException;
-use Grifart\Stateful\Exceptions\ExternalSerializerException;
-use Grifart\Stateful\Exceptions\UsageException;
+use Grifart\Stateful\ClosureExternalSerializerException;
+use Grifart\Stateful\ExternalSerializerException;
+use Grifart\Stateful\UsageException;
 use Grifart\Stateful\State;
 
 /**
