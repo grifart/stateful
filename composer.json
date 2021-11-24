@@ -20,6 +20,7 @@
 		"grifart/equalable-utils": "^1.0"
 	},
 	"require-dev": {
+		"grifart/scaffolder": "^0.6.0",
 		"nette/tester": "^2.0.0",
 		"mockery/mockery": "^1.0.0",
 		"phpstan/phpstan": "^0.12",
@@ -27,11 +28,15 @@
 		"php-parallel-lint/php-console-color": "^1.0",
 		"brick/date-time": "^0.2.1"
 	},
+	"suggest": {
+		"grifart/scaffolder": "stateful provides integration into scaffolder"
+	},
 	"autoload": {
 		"psr-4": {
 			"Grifart\\Stateful\\": "src/"
 		},
-		"classmap": ["src/exceptions.php"]
+		"classmap": ["src/exceptions.php"],
+		"files": ["src/Bridge/Scaffolder/functions.php"]
 	},
 	"autoload-dev": {
 		"psr-4": {
