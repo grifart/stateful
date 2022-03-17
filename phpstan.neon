@@ -6,3 +6,9 @@ parameters:
 			message: "#^Variable \\$assertsEnabled in isset\\(\\) always exists and is not nullable\\.$#"
 			count: 1
 			path: src/Tools.php
+
+		# https://github.com/phpstan/phpstan/issues/5502
+		-
+			message: "#^Dead catch \\- ReflectionException is never thrown in the try block\\.$#"
+			count: 1
+			path: src/State.php
