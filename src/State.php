@@ -113,6 +113,9 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 	}
 
 
+	/**
+	 * @return class-string
+	 */
 	public function getClassName(): string
 	{
 		return $this->className;
