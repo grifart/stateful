@@ -120,11 +120,12 @@ final class BrickDateTimeIntegration
 			/** @matchSubtypes*/
 			static function (State $state): TimeZone {
 				$state->ensureVersion(1);
+				$desiredClassName = $state->getClassName();
+
 				/** @var array{id: string} $state */
 				$instance = TimeZone::parse($state['id']);
 
 				// make sure that what we have serialized, we are also deserializing
-				$desiredClassName = $state->getClassName();
 				\assert($instance instanceof $desiredClassName);
 
 				return $instance;
