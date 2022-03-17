@@ -167,12 +167,29 @@ namespace Grifart\Collection {
 		}
 
 
+		public function __unserialize(array $data): void
+		{
+			[$values, $keys] = $data;
+			$this->values = $values;
+			$this->keys = $keys;
+		}
+
+
 		public function serialize(): string
 		{
 			return \serialize([
 				$this->values,
 				$this->keys
 			]);
+		}
+
+
+		public function __serialize(): array
+		{
+			return [
+				$this->values,
+				$this->keys,
+			];
 		}
 
 
