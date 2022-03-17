@@ -162,7 +162,7 @@ final class SerializerList implements Serializer
 	}
 
 	/**
-	 * @param class-string<mixed> $typeToValidate
+	 * @param class-string $typeToValidate
 	 * @throw ExternalSerializerException
 	 */
 	private static function checkInterfacesAndAbstractClasses(string $typeToValidate): void
