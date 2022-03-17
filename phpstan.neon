@@ -1,5 +1,14 @@
 parameters:
 	checkMissingIterableValueType: false
 	ignoreErrors:
-		# intentionally; used to test if assertions are enabled in Tools.php
-		- '#Variable \$assertsEnabled in isset\(\) always exists and is not nullable.#'
+		# we need to test if assertions are enabled
+		-
+			message: "#^Variable \\$assertsEnabled in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: src/Tools.php
+
+		# https://github.com/phpstan/phpstan/issues/5502
+		-
+			message: "#^Dead catch \\- ReflectionException is never thrown in the try block\\.$#"
+			count: 1
+			path: src/State.php

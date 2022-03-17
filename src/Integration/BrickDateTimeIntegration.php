@@ -49,6 +49,7 @@ final class BrickDateTimeIntegration
 			},
 			static function (State $state): Instant {
 				$state->ensureVersion(1);
+				/** @var array{timestamp: string} $state */
 				$local = LocalDateTime::parse($state['timestamp'], IsoParsers::offsetDateTime());
 				return $local->atTimeZone(TimeZone::utc())->getInstant();
 			},
@@ -62,6 +63,7 @@ final class BrickDateTimeIntegration
 			},
 			static function (State $state): LocalDate {
 				$state->ensureVersion(1);
+				/** @var array{date: string} $state */
 				return LocalDate::parse($state['date']);
 			},
 
@@ -74,6 +76,7 @@ final class BrickDateTimeIntegration
 			},
 			static function (State $state): LocalTime {
 				$state->ensureVersion(1);
+				/** @var array{time: string} $state */
 				return LocalTime::parse($state['time']);
 			},
 
@@ -86,6 +89,7 @@ final class BrickDateTimeIntegration
 			},
 			static function (State $state): LocalDateTime {
 				$state->ensureVersion(1);
+				/** @var array{datetime: string} $state */
 				return LocalDateTime::parse($state['datetime']);
 			},
 
@@ -98,6 +102,7 @@ final class BrickDateTimeIntegration
 			},
 			static function (State $state): ZonedDateTime {
 				$state->ensureVersion(1);
+				/** @var array{dateTimeWithZone: string} $state */
 				return ZonedDateTime::parse($state['dateTimeWithZone']);
 			},
 
@@ -115,10 +120,12 @@ final class BrickDateTimeIntegration
 			/** @matchSubtypes*/
 			static function (State $state): TimeZone {
 				$state->ensureVersion(1);
+				$desiredClassName = $state->getClassName();
+
+				/** @var array{id: string} $state */
 				$instance = TimeZone::parse($state['id']);
 
 				// make sure that what we have serialized, we are also deserializing
-				$desiredClassName = $state->getClassName();
 				\assert($instance instanceof $desiredClassName);
 
 				return $instance;
@@ -134,6 +141,7 @@ final class BrickDateTimeIntegration
 			},
 			static function (State $state): Duration {
 				$state->ensureVersion(1);
+				/** @var array{duration: string} $state */
 				return Duration::parse($state['duration']);
 			},
 		);

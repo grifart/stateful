@@ -7,9 +7,6 @@
 namespace Grifart\Stateful;
 
 use Ds\Hashable;
-use Grifart\Stateful\ObjectStateException;
-use Grifart\Stateful\PayloadException;
-use Grifart\Stateful\PayloadProcessorException;
 use function Interop\EqualableUtils\equals;
 
 
@@ -283,7 +280,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 	/** @var \ArrayIterator<string, mixed> */
 	private \ArrayIterator $iterator;
 
-	public function current()
+	public function current(): mixed
 	{
 		$this->setUsed($this->key());
 
@@ -295,7 +292,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 		$this->iterator->next();
 	}
 
-	public function key()
+	public function key(): mixed
 	{
 		return $this->iterator->key();
 	}
