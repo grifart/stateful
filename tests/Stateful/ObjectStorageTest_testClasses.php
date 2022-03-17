@@ -195,11 +195,9 @@ namespace Grifart\Collection {
 		}
 
 		/**
-		 * @param mixed $key
-		 * @return mixed
 		 * @throws \UnexpectedValueException If key is missing
 		 */
-		public function offsetGet($key)
+		public function offsetGet(mixed $key): mixed
 		{
 			$hash = $this->getKeyHash($key);
 
