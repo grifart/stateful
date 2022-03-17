@@ -7,9 +7,6 @@
 namespace Grifart\Stateful;
 
 use Ds\Hashable;
-use Grifart\Stateful\ObjectStateException;
-use Grifart\Stateful\PayloadException;
-use Grifart\Stateful\PayloadProcessorException;
 use function Interop\EqualableUtils\equals;
 
 
