@@ -28,6 +28,7 @@ namespace Grifart\Collection {
 		}
 
 		/** Return the current element */
+		#[\ReturnTypeWillChange]
 		public function current()
 		{
 			$key = $this->key();
@@ -45,6 +46,7 @@ namespace Grifart\Collection {
 		 * Return the key of the current element
 		 * @return mixed|null
 		 */
+		#[\ReturnTypeWillChange]
 		public function key()
 		{
 			return $this->keysIterator->current();

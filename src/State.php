@@ -283,6 +283,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 	/** @var \ArrayIterator<string, mixed> */
 	private \ArrayIterator $iterator;
 
+	#[\ReturnTypeWillChange]
 	public function current()
 	{
 		$this->setUsed($this->key());
@@ -295,6 +296,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 		$this->iterator->next();
 	}
 
+	#[\ReturnTypeWillChange]
 	public function key()
 	{
 		return $this->iterator->key();
