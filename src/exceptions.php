@@ -176,7 +176,16 @@ final class ObjectStateBuilderException extends UsageException {
 	 */
 	public static function fieldIsAlreadySet($name, $value): self
 	{
-		return new self("You have already set field '$name' to value '$value'.");
+		if (\is_scalar($value) || (\is_object($value) && $value instanceof \Stringable)) {
+			return new self(\sprintf("You have already set field '%s' to value '%s'.", $name, (string) $value));
+		}
+
+		return new self(\sprintf("You have already set field '%s' to value of type '%s'.",
+			$name,
+			\is_object($value)
+				? $value::class
+				: \gettype($value)
+		));
 	}
 
 	/**
