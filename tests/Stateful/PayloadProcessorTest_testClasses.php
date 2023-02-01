@@ -5,6 +5,7 @@ namespace Grifart\Stateful\TestClasses;
 use Grifart\Stateful\State;
 use Grifart\Stateful\StateBuilder;
 use Grifart\Stateful\Stateful;
+use Grifart\Stateful\StatefulBackedEnum;
 
 final class EmptyClass implements Stateful {
 
@@ -193,5 +194,49 @@ final class ObjectWithAnArrayOfObjects implements Stateful {
 		assert($state->getVersion() === 1);
 
 		return $state->makeAnEmptyObject(self::class);
+	}
+}
+
+enum IntEnum: int implements Stateful
+{
+	use StatefulBackedEnum;
+	case ONE = 1;
+}
+enum StringEnum: string implements Stateful
+{
+	use StatefulBackedEnum;
+	case A = 'a';
+}
+
+final class ObjectWithEnumProperties implements Stateful
+{
+	private IntEnum $intEnum;
+	private StringEnum $stringEnum;
+
+	public function __construct()
+	{
+		$this->intEnum = IntEnum::ONE;
+		$this->stringEnum = StringEnum::A;
+	}
+
+	public function _getState(): State
+	{
+		return StateBuilder::from($this)
+			->version(1)
+			->field('intEnum', $this->intEnum)
+			->field('stringEnum', $this->stringEnum)
+			->build();
+	}
+
+	public static function _fromState(State $state): static
+	{
+		assert( $state->getVersion() === 1 );
+
+		/** @var self $me */
+		$me = $state->makeAnEmptyObject(self::class);
+		$me->intEnum = $state['intEnum'];
+		$me->stringEnum = $state['stringEnum'];
+
+		return $me;
 	}
 }

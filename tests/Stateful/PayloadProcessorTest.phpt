@@ -236,6 +236,38 @@ class PayloadProcessorTest extends TestCase
 		);
 	}
 
+	public function test_objectWithEnums(): void
+	{
+		$processor = $this->provideProcessor();
+		$testClass = new TestClasses\ObjectWithEnumProperties();
+		$payload = $processor->toPayload($testClass);
+
+		Assert::same(
+			[
+				'@(meta)' => [
+					'type' => 'object',
+					'name' => TestClasses\ObjectWithEnumProperties::class,
+					'serializationVersion' => 1
+				],
+				'intEnum' => [
+					'@(meta)' => [
+						'type' => 'object',
+						'name' => TestClasses\IntEnum::class,
+					],
+					'value' => 1,
+				],
+				'stringEnum' => [
+					'@(meta)' => [
+						'type' => 'object',
+						'name' => TestClasses\StringEnum::class,
+					],
+					'value' => 'a',
+				],
+			],
+			$payload->getPrimitives(),
+		);
+	}
+
 	public function test_deserialization_scalar(): void
 	{
 		$processor = $this->provideProcessor();
