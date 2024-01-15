@@ -2,7 +2,9 @@
 
 namespace Grifart\Stateful;
 
-
+/**
+ * @phpstan-require-implements \BackedEnum
+ */
 trait StatefulBackedEnum
 {
 	public function _getState(): State
