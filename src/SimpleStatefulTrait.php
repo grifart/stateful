@@ -5,7 +5,10 @@ namespace Grifart\Stateful;
 use Grifart\Stateful\VersionMismatchException;
 
 
-trait SimpleStatefulTrait// implements Stateful
+/**
+ * @phpstan-require-implements Stateful
+ */
+trait SimpleStatefulTrait
 {
 	/**
 	 * Provides a list of properties used to create a serializable state
