@@ -2,6 +2,7 @@
 
 namespace Grifart\Stateful\Mapper;
 
+use Grifart\Stateful\UsageException;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
@@ -47,10 +48,10 @@ Assert::same('transfer name', $deferredMapper->toTransferName('assertion error')
 Assert::same('fqn', $deferredMapper->toFullyQualifiedName('assertion error'));
 
 // throws exception in destructor
-Assert::error(function () use ($deferredMapper) {
+Assert::throws(function () use ($deferredMapper) {
 	/** @noinspection ImplicitMagicMethodCallInspection */
 	$deferredMapper->__destruct();
-}, \E_USER_ERROR);
+}, UsageException::class);
 
 // Check that it catches assertions in proper order
 [$toTransferNameError, $toFqnError] = $deferredMapper->getFailedAssertions();

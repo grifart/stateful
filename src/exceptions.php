@@ -352,7 +352,7 @@ final class PayloadProcessorException extends UsageException {
 
 class ClosureExternalSerializerException extends UsageException {
 
-	public function __construct(\ReflectionFunction $fnR, string $message, \Throwable $previous = NULL)
+	public function __construct(\ReflectionFunction $fnR, string $message, ?\Throwable $previous = NULL)
 	{
 		$functionLocation = $fnR->getFileName() . ':' . $fnR->getStartLine() . '-' . $fnR->getEndLine() . ' ';
 

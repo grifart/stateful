@@ -2,6 +2,8 @@
 
 namespace Grifart\Stateful\Mapper;
 
+use Grifart\Stateful\UsageException;
+
 /**
  * Useful testing / debugging.
  *
@@ -65,7 +67,7 @@ final class DeferredAssertionsMapper implements Mapper {
 		}
 
 		$message = "Some of stateful mapper assertions failed: \n\n" . \implode("\n\n", $this->failedAssertions);
-		\trigger_error($message, \E_USER_ERROR);
+		throw new UsageException($message);
 
 	}
 

@@ -43,7 +43,6 @@ final class RemovedClassesDeserializer
 				$normalizedDeserializers[$className] = \Closure::fromCallable($deserializer);
 			} else {
 				\assert(\is_int($className));
-				\assert(\is_string($deserializer));
 				$normalizedDeserializers[$deserializer] = self::defaultDeserializer();
 			}
 		}

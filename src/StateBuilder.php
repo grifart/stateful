@@ -13,8 +13,6 @@ final class StateBuilder
 
 	public static function from(object $theInstance): self
 	{
-		assert(is_object($theInstance));
-
 		return new self($theInstance);
 	}
 
