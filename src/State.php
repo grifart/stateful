@@ -222,7 +222,7 @@ final class State implements \ArrayAccess, \Countable, \Iterator, Hashable
 	 * Ignores state property
 	 * This is used to suppress unused property errors when object reconstruction is done.
 	 *
-	 * @param array $properties
+	 * @param string[] $properties
 	 */
 	public function ignoreProperty(array $properties): void
 	{

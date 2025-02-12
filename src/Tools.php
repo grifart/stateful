@@ -11,7 +11,7 @@ final class Tools
 	 */
 	public static function areAssertsEvaluated(): bool
 	{
-		assert($assertsEnabled = TRUE); // will be evaluated when asserts enabled
+		assert($assertsEnabled = TRUE); // will be evaluated when asserts enabled, @phpstan-ignore function.alreadyNarrowedType
 		return isset($assertsEnabled);
 	}
 

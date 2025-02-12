@@ -69,14 +69,8 @@ final class SerializerList implements Serializer
 
 			if ($convertedClosure instanceof ClosureSerializer) {
 				$list->addSerializer($convertedClosure);
-				continue;
-
-			}
-
-			if ($convertedClosure instanceof ClosureDeserializer) {
+			} else {
 				$list->addDeserializer($convertedClosure);
-				continue;
-
 			}
 		}
 
@@ -106,7 +100,6 @@ final class SerializerList implements Serializer
 			throw ClosureExternalSerializerException::wrongNumberOrArguments($fnR, $numberOfParameters, 1);
 		}
 		$param = $fnR->getParameters()[0];
-		assert($param instanceof \ReflectionParameter);
 
 		$paramTypeR = $param->getType();
 		assert($paramTypeR instanceof \ReflectionNamedType);

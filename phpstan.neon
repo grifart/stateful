@@ -1,6 +1,10 @@
 parameters:
-	checkMissingIterableValueType: false
+	level: 9
+
 	ignoreErrors:
+		-
+			identifier: missingType.iterableValue
+
 		# we need to test if assertions are enabled
 		-
 			message: "#^Variable \\$assertsEnabled in isset\\(\\) always exists and is not nullable\\.$#"
@@ -12,3 +16,13 @@ parameters:
 			message: "#^Dead catch \\- ReflectionException is never thrown in the try block\\.$#"
 			count: 1
 			path: src/State.php
+
+		-
+			identifier: varTag.nativeType
+			message: '#^PHPDoc tag @var with type array\<string, string\> is not subtype of native type Grifart\\Stateful\\State\.$#'
+
+		-
+			identifier: trait.unused
+			paths:
+				- src/SimpleStatefulTrait.php
+				- src/StatefulBackedEnum.php

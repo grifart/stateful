@@ -9,13 +9,13 @@
 			"composer run tester"
 		],
 		"tester": "vendor/bin/tester -c tests/php-unix.ini tests/Stateful",
-		"phpstan": "vendor/bin/phpstan analyze -c phpstan.neon --ansi --no-progress --no-interaction --level max src",
+		"phpstan": "vendor/bin/phpstan analyze -c phpstan.neon --ansi --no-progress --no-interaction src",
 		"syntax-check": "vendor/bin/parallel-lint src tests"
 	},
 
 	"require": {
-		"php": "^8.0",
-		"php-ds/php-ds": "^1.1",
+		"php": "^8.2",
+		"ext-ds": "^1.0",
 		"grifart/comparable-polyfill": "^1.0",
 		"grifart/equalable-utils": "^1.0"
 	},
@@ -23,10 +23,11 @@
 		"grifart/scaffolder": "^0.6.0",
 		"nette/tester": "^2.0.0",
 		"mockery/mockery": "^1.0.0",
-		"phpstan/phpstan": "^1.4",
+		"phpstan/phpstan": "^2.0",
+		"php-ds/php-ds": "^1.0",
 		"php-parallel-lint/php-parallel-lint": "^1.0",
 		"php-parallel-lint/php-console-color": "^1.0",
-		"brick/date-time": "^0.2.1"
+		"brick/date-time": "^0.7.0"
 	},
 	"suggest": {
 		"grifart/scaffolder": "stateful provides integration into scaffolder"

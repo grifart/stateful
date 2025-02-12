@@ -57,7 +57,7 @@ final class PayloadProcessor
 
 		// set serialized version
 		assert(is_array($primitivizedData)); // object --> array
-		$primitivizedData[self::META_FIELD][self::META_FIELD_SERIALIZATION_VERSION] = 1;
+		$primitivizedData[self::META_FIELD][self::META_FIELD_SERIALIZATION_VERSION] = 1; // @phpstan-ignore offsetAccess.nonOffsetAccessible
 
 		/** @noinspection ReturnNullInspection */
 		return new Payload($primitivizedData);
@@ -119,8 +119,6 @@ final class PayloadProcessor
 
 	private function extractObjectState(object $object): State
 	{
-		assert(is_object($object));
-
 		// Stateful --> State
 		if ($object instanceof Stateful) {
 			return $object->_getState();
@@ -150,7 +148,6 @@ final class PayloadProcessor
 
 		// Normalize payload: to be able to === resulting arrays
 		$sortResult = ksort($payload);
-		assert($sortResult === TRUE);
 
 		$transferClassName = $this->mapper->toTransferName($className);
 		if($transferClassName === NULL) {
@@ -275,7 +272,7 @@ final class PayloadProcessor
 		$objectState = new State($className, $stateVersion, $stateData);
 
 		if ($isStatefulObject) {
-			/** @var Stateful|string $className */
+			/** @var class-string<Stateful> $className */
 			$createdObject = $className::_fromState($objectState);
 			if(Tools::areAssertsEvaluated()) {
 				$this->assertCreatedObject($objectState, $createdObject);

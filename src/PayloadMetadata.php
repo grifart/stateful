@@ -53,12 +53,8 @@ final class PayloadMetadata
 	 * @return \Grifart\Stateful\PayloadMetadata
 	 * @throws \Grifart\Stateful\MalformedMetadataException if given metadata are not valid
 	 */
-	public static function parse($metaArray): self
+	public static function parse(array $metaArray): self
 	{
-		if (!is_array($metaArray)) {
-			throw MalformedMetadataException::metadataMustBeAnArray(gettype($metaArray));
-		}
-
 		if (!isset($metaArray[PayloadMetadata::META_FIELD_TYPE])) {
 			throw MalformedMetadataException::typeFieldIsMissing();
 		}
