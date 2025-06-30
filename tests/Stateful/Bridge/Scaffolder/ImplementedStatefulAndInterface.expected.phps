@@ -14,6 +14,7 @@ use Grifart\Stateful\Stateful;
 
 final class GeneratedWithInterface implements Stateful
 {
+	#[\Override]
 	public function _getState(): State
 	{
 		return StateBuilder::from($this)
@@ -22,6 +23,7 @@ final class GeneratedWithInterface implements Stateful
 	}
 
 
+	#[\Override]
 	public static function _fromState(State $state): static
 	{
 		$state->ensureVersion(1);
