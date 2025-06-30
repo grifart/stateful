@@ -34,6 +34,7 @@ final class ImplementedStateful implements Capability
 		$getState->setReturnType(State::class);
 		$getState->addBody('return StateBuilder::from($this)');
 		$getState->addBody("\t->version(1)");
+		$getState->addAttribute(\Override::class);
 
 		$fromState = $classType->addMethod('_fromState');
 		$fromState->setVisibility('public');
@@ -43,6 +44,7 @@ final class ImplementedStateful implements Capability
 		$fromState->addBody('$state->ensureVersion(1);');
 		$fromState->addBody('$self = $state->makeAnEmptyObject(self::class);');
 		$fromState->addBody("\assert(\$self instanceof static);\n");
+		$fromState->addAttribute(\Override::class);
 
 		$fromState->addBody(sprintf(
 			'/** @var array{%s} $state */',

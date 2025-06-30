@@ -13,6 +13,7 @@ use Grifart\Stateful\StateBuilder;
 
 final class Generated
 {
+	#[\Override]
 	public function _getState(): State
 	{
 		return StateBuilder::from($this)
@@ -21,6 +22,7 @@ final class Generated
 	}
 
 
+	#[\Override]
 	public static function _fromState(State $state): static
 	{
 		$state->ensureVersion(1);
