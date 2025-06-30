@@ -29,8 +29,8 @@ final class SingleNamespaceMapper implements Mapper
 		if (!\preg_match('#^(|(.*?)\\\\)([^\\\\]*)$#', $fullyQualifiedName, $matches)) {
 			throw MapperException::invalidClassNameGiven($fullyQualifiedName);
 		}
-		$namespace = $matches[2] ?? ''; // because 2nd matching group can be skipped when there is no namespace
-		$className = $matches[3];
+
+		[,, $namespace, $className] = $matches;
 		if ($className === '') {
 			throw MapperException::fullyQualifiedNameCannotEndWithNamespaceSeparator($fullyQualifiedName);
 		}
