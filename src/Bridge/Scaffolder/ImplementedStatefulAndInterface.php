@@ -24,10 +24,11 @@ final class ImplementedStatefulAndInterface implements Capability
 	private ImplementedInterface $implementedInterface;
 	private ImplementedStateful $implementedStateful;
 
-	public function __construct()
-	{
+	public function __construct(
+		Capability $fromStateMethod = new FromStateMethodUsingAssignment(),
+	) {
 		$this->implementedInterface = new ImplementedInterface(Stateful::class);
-		$this->implementedStateful = new ImplementedStateful();
+		$this->implementedStateful = new ImplementedStateful($fromStateMethod);
 	}
 
 	public function applyTo(

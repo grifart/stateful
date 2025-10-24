@@ -13,11 +13,18 @@ use Grifart\Stateful\StateBuilder;
 
 final class Generated
 {
+	public function __construct(
+		private string $value,
+	) {
+	}
+
+
 	#[\Override]
 	public function _getState(): State
 	{
 		return StateBuilder::from($this)
 			->version(1)
+			->field('value', $this->value)
 			->build();
 	}
 
@@ -29,7 +36,8 @@ final class Generated
 		$self = $state->makeAnEmptyObject(self::class);
 		\assert($self instanceof static);
 
-		/** @var array{} $state */
+		/** @var array{value: string} $state */
+		$self->value = $state['value'];
 
 		return $self;
 	}
