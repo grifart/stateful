@@ -4,43 +4,21 @@ declare(strict_types=1);
 
 namespace Grifart\Stateful\Bridge\Scaffolder;
 
-use Grifart\ClassScaffolder\Capabilities\Capability;
-use Grifart\ClassScaffolder\Capabilities\CapabilityTools;
-use Grifart\ClassScaffolder\ClassInNamespace;
+use Closure;
 use Grifart\ClassScaffolder\Definition\ClassDefinition;
-use Grifart\ClassScaffolder\Definition\Field;
-use Grifart\Stateful\State;
 use Nette\PhpGenerator\Literal;
+use Nette\PhpGenerator\Method;
 
-final readonly class FromStateMethodUsingConstructor implements Capability
+final readonly class FromStateMethodUsingConstructor extends FromStateMethod
 {
-	public function applyTo(
+	#[\Override]
+	protected function addFromStateReconstitution(
+		Method $fromState,
 		ClassDefinition $definition,
-		ClassInNamespace $draft,
-		?ClassInNamespace $current,
+		Closure $addStateArrayShape,
 	): void
 	{
-		$namespace = $draft->getNamespace();
-		$classType = $draft->getClassType();
-		CapabilityTools::checkIfAllFieldsArePresent($definition, $classType);
-
-		$namespace->addUse(State::class);
-
-		$fromState = $classType->addMethod('_fromState');
-		$fromState->setVisibility('public');
-		$fromState->setStatic(TRUE);
-		$fromState->setReturnType('static');
-		$fromState->addParameter('state')->setType(State::class);
-		$fromState->addBody('$state->ensureVersion(1);\n');
-		$fromState->addAttribute(\Override::class);
-
-		$fromState->addBody(sprintf(
-			'/** @var array{%s} $state */',
-			implode(', ', array_map(
-				static fn(Field $field) => sprintf('%s: %s', $field->getName(), $field->getType()->getDocCommentType($namespace)),
-				$definition->getFields(),
-			)),
-		));
+		$addStateArrayShape();
 
 		$fromState->addBody('return new static(');
 
