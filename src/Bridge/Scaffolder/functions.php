@@ -3,12 +3,16 @@
 namespace Grifart\Stateful\Bridge\Scaffolder;
 
 
-function implementedStateful(): ImplementedStateful {
-	return new ImplementedStateful();
+function implementedStateful(
+	FromStateMethod|null $fromStateMethod = null,
+): ImplementedStateful {
+	return new ImplementedStateful($fromStateMethod);
 }
 
-function implementedStatefulAndInterface(): ImplementedStatefulAndInterface {
-	return new ImplementedStatefulAndInterface();
+function implementedStatefulAndInterface(
+	FromStateMethod|null $fromStateMethod = null,
+): ImplementedStatefulAndInterface {
+	return new ImplementedStatefulAndInterface($fromStateMethod);
 }
 
 /** @deprecated */

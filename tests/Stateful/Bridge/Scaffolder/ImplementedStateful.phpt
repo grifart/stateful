@@ -2,6 +2,7 @@
 
 namespace Grifart\Stateful\Bridge\Scaffolder;
 
+use Grifart\ClassScaffolder\Capabilities\ConstructorWithPromotedProperties;
 use Grifart\ClassScaffolder\ClassGenerator;
 use Tester\Assert;
 use function Grifart\ClassScaffolder\Definition\definitionOf;
@@ -14,5 +15,8 @@ Assert::matchFile(
 	__DIR__ . '/ImplementedStateful.expected.phps',
 	(string) $classGenerator->generateClass(
 		definitionOf(Generated::class)
-			->with(new ImplementedStateful()))
+			->with(new ConstructorWithPromotedProperties())
+			->with(new ImplementedStateful())
+			->withField('value', 'string'),
+	),
 );

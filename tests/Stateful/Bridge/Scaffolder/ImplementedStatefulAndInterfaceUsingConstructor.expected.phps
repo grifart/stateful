@@ -34,12 +34,10 @@ final class GeneratedWithInterface implements Stateful
 	public static function _fromState(State $state): static
 	{
 		$state->ensureVersion(1);
-		$self = $state->makeAnEmptyObject(self::class);
-		\assert($self instanceof static);
 
 		/** @var array{value: string} $state */
-		$self->value = $state['value'];
-
-		return $self;
+		return new static(
+			$state['value'],
+		);
 	}
 }
