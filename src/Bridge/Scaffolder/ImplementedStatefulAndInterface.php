@@ -17,7 +17,7 @@ final class ImplementedStatefulAndInterface implements Capability
 	private ImplementedStateful $implementedStateful;
 
 	public function __construct(
-		FromStateMethod $fromStateMethod = new FromStateMethodUsingAssignment(),
+		FromStateMethod|null $fromStateMethod = null,
 	) {
 		$this->implementedInterface = new ImplementedInterface(Stateful::class);
 		$this->implementedStateful = new ImplementedStateful($fromStateMethod);
