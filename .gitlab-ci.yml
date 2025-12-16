@@ -25,6 +25,10 @@ install.php84:
   extends: .install
   image: grifart/php8.4-with-all-modules-and-various-tools
 
+install.php85:
+  extends: .install
+  image: grifart/php8.5-with-all-modules-and-various-tools
+
 
 .test:
   stage: test
@@ -47,16 +51,21 @@ test.php84:
   image: grifart/php8.4-with-all-modules-and-various-tools
   dependencies: [ install.php84 ]
 
+test.php85:
+  extends: .test
+  image: grifart/php8.5-with-all-modules-and-various-tools
+  dependencies: [ install.php85 ]
+
 
 phpstan:
   stage: test
-  image: grifart/php8.4-with-all-modules-and-various-tools
-  dependencies: [ install.php84 ]
+  image: grifart/php8.5-with-all-modules-and-various-tools
+  dependencies: [ install.php85 ]
   script: composer run phpstan
 
 
 linter:
   stage: test
-  image: grifart/php8.4-with-all-modules-and-various-tools
-  dependencies: [ install.php84 ]
+  image: grifart/php8.5-with-all-modules-and-various-tools
+  dependencies: [ install.php85 ]
   script: composer run syntax-check
